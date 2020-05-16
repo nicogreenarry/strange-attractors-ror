@@ -4,6 +4,8 @@
 
 All code in this repo is available under the MIT License.
 
+If you do something cool with it, I'd love to hear about it!
+
 ## Getting started
 
 To get started with the app, clone the repo and then install the needed gems:
