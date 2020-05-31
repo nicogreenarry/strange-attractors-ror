@@ -13,8 +13,8 @@ function getColorIndicesForCoord(x, y, width) {
 }
 
 function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax}) {
-  const canvasX = Math.round((x - xMin) / (xMax - xMin) * WIDTH);
-  const canvasY = HEIGHT - Math.round((y - yMin) / (yMax - yMin) * HEIGHT);
+  const canvasX = Math.round((x - xMin) / (xMax - xMin) * (WIDTH - 1));
+  const canvasY = HEIGHT - Math.round((y - yMin) / (yMax - yMin) * (HEIGHT - 1)) - 1;
   return [canvasX, canvasY];
 }
 
@@ -67,7 +67,6 @@ const Attractor = (props) => {
     const attractorImageData = ctx.createImageData(WIDTH, HEIGHT);
     points.forEach(([x, y]) => {
       const [canvasX, canvasY] = getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax});
-
       const [redIdx, greenIdx, blueIdx, alphaIdx] = getColorIndicesForCoord(canvasX, canvasY, WIDTH);
       attractorImageData.data[redIdx] = COLOR[0];
       attractorImageData.data[greenIdx] = COLOR[1];
