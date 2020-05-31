@@ -13,8 +13,8 @@ function getColorIndicesForCoord(x, y, width) {
 }
 
 function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax}) {
-  const canvasX = Math.round((x - xMin) / (xMax - xMin) * WIDTH);
-  const canvasY = HEIGHT - Math.round((y - yMin) / (yMax - yMin) * HEIGHT);
+  const canvasX = Math.round((x - xMin) / (xMax - xMin) * (WIDTH - 1));
+  const canvasY = HEIGHT - Math.round((y - yMin) / (yMax - yMin) * (HEIGHT - 1)) - 1;
   return [canvasX, canvasY];
 }
 
@@ -48,31 +48,32 @@ const Attractor = (props) => {
   }, [props.coefficients]);
 
   useEffect(() => {
-    if (canvasEl.current) {
-      const ctx = canvasEl.current.getContext('2d');
-      ctx.fillStyle = 'green';
-
-      // TODO: Pull a lot of this logic out into services
-      const points = attractor.getPointsForRendering();
-      const {xMin, xMax, yMin, yMax} = points.reduce((bounds, [x, y]) => {
-        bounds.xMin = Math.min(bounds.xMin, x);
-        bounds.xMax = Math.max(bounds.xMax, x);
-        bounds.yMin = Math.min(bounds.yMin, y);
-        bounds.yMax = Math.max(bounds.yMax, y);
-        return bounds;
-      }, {xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity});
-      const attractorImageData = ctx.createImageData(WIDTH, HEIGHT);
-      points.forEach(([x, y]) => {
-        const [canvasX, canvasY] = getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax});
-
-        const [redIdx, greenIdx, blueIdx, alphaIdx] = getColorIndicesForCoord(canvasX, canvasY, WIDTH);
-        attractorImageData.data[redIdx] = COLOR[0];
-        attractorImageData.data[greenIdx] = COLOR[1];
-        attractorImageData.data[blueIdx] = COLOR[2];
-        attractorImageData.data[alphaIdx] = COLOR[3];
-      });
-      ctx.putImageData(attractorImageData, 0, 0);
+    if (!canvasEl.current) {
+      return;
     }
+
+    const ctx = canvasEl.current.getContext('2d');
+    ctx.fillStyle = 'green';
+
+    // TODO: Pull a lot of this logic out into services
+    const points = attractor.getPointsForRendering();
+    const {xMin, xMax, yMin, yMax} = points.reduce((bounds, [x, y]) => {
+      bounds.xMin = Math.min(bounds.xMin, x);
+      bounds.xMax = Math.max(bounds.xMax, x);
+      bounds.yMin = Math.min(bounds.yMin, y);
+      bounds.yMax = Math.max(bounds.yMax, y);
+      return bounds;
+    }, {xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity});
+    const attractorImageData = ctx.createImageData(WIDTH, HEIGHT);
+    points.forEach(([x, y]) => {
+      const [canvasX, canvasY] = getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax});
+      const [redIdx, greenIdx, blueIdx, alphaIdx] = getColorIndicesForCoord(canvasX, canvasY, WIDTH);
+      attractorImageData.data[redIdx] = COLOR[0];
+      attractorImageData.data[greenIdx] = COLOR[1];
+      attractorImageData.data[blueIdx] = COLOR[2];
+      attractorImageData.data[alphaIdx] = COLOR[3];
+    });
+    ctx.putImageData(attractorImageData, 0, 0);
   }, [canvasEl.current]);
 
   return <canvas ref={canvasEl} id="main-attractor" width={WIDTH} height={HEIGHT} />
