@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import React from 'react';
+import React, {useState} from 'react';
 import MathJax from 'react-mathjax';
 import styled from 'styled-components';
 
@@ -46,12 +46,24 @@ function getTerms(coefficients) {
     .value();
 }
 
-const EquationContainer = styled.div`
-  // The equation doesn't render immediately, so a hard-coded height prevents the page from jumping around.
-  height: 7em; 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-const Equation = ({coefficients, startingCoordinates}) => {
+const EquationContainer = styled.div`
+  // The equation doesn't render immediately, so a hard-coded height prevents the page from jumping around.
+  height: 6em; 
+`;
+
+const CenteredText = styled.p`
+  text-align: center;
+`;
+
+const Equation = ({coefficients, startingCoordinates, className}) => {
+  const [detailsExpanded, setDetailsExpanded] = useState(false);
+
   // Abbreviated coefficients
   const c = coefficients.map(coefficient => getMeaningfulCoefficient(coefficient));
   // It's easiest to format the leading coefficients specially, since if they're negative, we don't want their minus
@@ -68,12 +80,32 @@ const Equation = ({coefficients, startingCoordinates}) => {
   const yEquation = `y_{n+1} = ${c6} ${yTerms.join(' ')}`;
 
   return (
-    <MathJax.Provider>
-      <EquationContainer>
-        <MathJax.Node formula={xEquation} />
-        <MathJax.Node formula={yEquation} />
-      </EquationContainer>
-    </MathJax.Provider>
+    <Container className={className}>
+      <MathJax.Provider>
+        <EquationContainer>
+          <MathJax.Node formula={xEquation} />
+          <MathJax.Node formula={yEquation} />
+        </EquationContainer>
+      </MathJax.Provider>
+      <button
+        className="btn btn-sm btn-outline-info"
+        onClick={() => setDetailsExpanded(prev => !prev)}
+      >
+        {detailsExpanded ? 'Hide details' : 'Show details'}
+      </button>
+      {detailsExpanded && (
+        <>
+          <CenteredText className="mt-2">
+            Full coefficients:<br />
+            {coefficients.join(', ')}
+          </CenteredText>
+          <CenteredText>
+            Starting point:<br />
+            x: {startingCoordinates[0]}, y: {startingCoordinates[1]}
+          </CenteredText>
+        </>
+      )}
+    </Container>
   );
 };
 

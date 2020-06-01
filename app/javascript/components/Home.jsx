@@ -46,7 +46,7 @@ export default () => {
         {...attractorPointProps}
         className="mb-3"
       />
-      <Equation {...attractorPointProps} />
+      <Equation {...attractorPointProps} className="mb-3" />
 
       <div className="flex">
         <button
