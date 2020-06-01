@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Attractor from './Attractor';
 import coefficientsFromLetters from '../services/attractor/coefficients_from_letters';
+import findInterestingCoefficients from '../services/attractor/find_interesting_coefficients';
 
 const someGoodAttractors = [
   'amtmnqqxuyga',
@@ -25,9 +26,11 @@ const someGoodAttractors = [
 }));
 
 export default () => {
-  const [coefficientsIdx, setCoefficientsIdx] = React.useState(0);
-
-  const savedSet = someGoodAttractors[coefficientsIdx];
+  const [coefficientsIdx, setCoefficientsIdx] = useState(0);
+  const [attractorPointProps, setAttractorPointProps] = useState(someGoodAttractors[coefficientsIdx]);
+  useEffect(() => {
+    setAttractorPointProps(someGoodAttractors[coefficientsIdx]);
+  }, [coefficientsIdx]);
 
   return (
     <div className="vw-100 vh-100 primary-color d-flex flex-column align-items-center justify-content-center">
@@ -38,16 +41,26 @@ export default () => {
         </p>
       </div>
       <Attractor
-        coefficients={savedSet.coefficients}
-        startingCoordinates={savedSet.startingCoordinates}
+        {...attractorPointProps}
         className="mb-3"
       />
-      <button
-        className="btn btn-primary"
-        onClick={() => setCoefficientsIdx(prevIdx => (prevIdx + 1) % someGoodAttractors.length)}
-      >
-        Next saved attractor
-      </button>
+      <div className="flex">
+        <button
+          className="btn btn-primary mx-2"
+          onClick={() => setCoefficientsIdx(prevIdx => (prevIdx + 1) % someGoodAttractors.length)}
+        >
+          Next saved attractor
+        </button>
+        <button
+          className="btn btn-outline-primary mx-2"
+          onClick={() => {
+            const attractorPoints = findInterestingCoefficients();
+            setAttractorPointProps(attractorPoints);
+          }}
+        >
+          Generate new attractor
+        </button>
+      </div>
     </div>
   );
 };

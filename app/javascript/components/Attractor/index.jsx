@@ -20,8 +20,9 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax}) {
 /*
   props: {
     coefficients: array of 12 integers
-    className?: string
     startingCoordinates: [number, number] - the x, y coordinates of the point to start with
+
+    className?: string
   }
  */
 const Attractor = (props) => {
