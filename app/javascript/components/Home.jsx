@@ -37,7 +37,7 @@ export default () => {
         className="btn btn-primary"
         onClick={() => setCoefficientsIdx(prevIdx => (prevIdx + 1) % someGoodAttractors.length)}
       >
-        Next
+        Next saved attractor
       </button>
     </div>
   );
