@@ -13,11 +13,13 @@ export default class AttractorPoints {
     props: {
       coefficients: array of 12 numbers
       initialCount?: integer. How many points to initially calculate.
-    }
+      startingCoordinates: [number, number] - the x, y coordinates of the point to start with
+   }
    */
-  constructor({coefficients, initialCount = 0}) {
+  constructor({coefficients, initialCount = 0, startingCoordinates}) {
     this.coefficients = coefficients;
     this.points = [];
+    this.startingCoordinates = startingCoordinates;
     this.boring = false; // Will stop calculating more points if boring
     this.boringReason = null;
     this.calculateMorePoints(initialCount);
@@ -27,11 +29,12 @@ export default class AttractorPoints {
     if (this.boring) {
       return;
     }
-    let [x0, y0] = this._getLastPoint() || [Math.random()/2 - .25, Math.random()/2 - .25];
+    let [x0, y0] = this.getCount() ? this._getLastPoint() : this.startingCoordinates;
     for (let i = 0; i < count; i++) {
       const [x1, y1] = calculateNextPoint(x0, y0, this.coefficients);
       this._addPoint(x1, y1);
       [x0, y0] = [x1, y1];
+      // TODO: Maybe this logic should be extracted out into some "boring test" function?
       if (Math.max(Math.abs(x0), Math.abs(y0)) > 10) {
         this.boring = true;
         this.boringReason = 'Overflow';

@@ -19,10 +19,15 @@ const someGoodAttractors = [
   'uwacxdqigkhf',
   'vbwnbdelyhul',
   'wncslflgihgl',
-];
+].map(letters => ({
+  coefficients: coefficientsFromLetters(letters),
+  startingCoordinates: [0, 0],
+}));
 
 export default () => {
   const [coefficientsIdx, setCoefficientsIdx] = React.useState(0);
+
+  const savedSet = someGoodAttractors[coefficientsIdx];
 
   return (
     <div className="vw-100 vh-100 primary-color d-flex flex-column align-items-center justify-content-center">
@@ -32,7 +37,11 @@ export default () => {
           Math is beautiful!
         </p>
       </div>
-      <Attractor coefficients={someGoodAttractors[coefficientsIdx]} className="mb-3"/>
+      <Attractor
+        coefficients={savedSet.coefficients}
+        startingCoordinates={savedSet.startingCoordinates}
+        className="mb-3"
+      />
       <button
         className="btn btn-primary"
         onClick={() => setCoefficientsIdx(prevIdx => (prevIdx + 1) % someGoodAttractors.length)}
