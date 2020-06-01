@@ -3,6 +3,8 @@ import Attractor from './Attractor';
 import coefficientsFromLetters from '../services/attractor/coefficients_from_letters';
 import findInterestingCoefficients from '../services/attractor/find_interesting_coefficients';
 
+import Equation from './Equation';
+
 const someGoodAttractors = [
   'amtmnqqxuyga',
   'cvqkghqtphte',
@@ -44,6 +46,8 @@ export default () => {
         {...attractorPointProps}
         className="mb-3"
       />
+      <Equation {...attractorPointProps} />
+
       <div className="flex">
         <button
           className="btn btn-primary mx-2"
