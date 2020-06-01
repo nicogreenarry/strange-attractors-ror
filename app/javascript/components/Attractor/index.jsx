@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import AttractorPoints from '../../services/attractor/attractor_points';
-import coefficientsFromLetters from '../../services/attractor/coefficients_from_letters';
 
 const WIDTH = 500;
 const HEIGHT = 500;
@@ -21,15 +20,18 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax}) {
 /*
   props: {
     coefficients: array of 12 integers
+    startingCoordinates: [number, number] - the x, y coordinates of the point to start with
+
     className?: string
   }
  */
 const Attractor = (props) => {
   const canvasEl = useRef(null);
-  const attractor = useMemo(() => {
+  const attractorPoints = useMemo(() => {
     return new AttractorPoints({
-      coefficients: coefficientsFromLetters(props.coefficients),
+      coefficients: props.coefficients,
       initialCount: 45000,
+      startingCoordinates: props.startingCoordinates,
     });
   }, [...props.coefficients]);
 
@@ -43,7 +45,7 @@ const Attractor = (props) => {
     ctx.fillStyle = 'green';
 
     // TODO: Pull a lot of this logic out into services
-    const points = attractor.getPointsForRendering();
+    const points = attractorPoints.getPointsForRendering();
     const {xMin, xMax, yMin, yMax} = points.reduce((bounds, [x, y]) => {
       bounds.xMin = Math.min(bounds.xMin, x);
       bounds.xMax = Math.max(bounds.xMax, x);
