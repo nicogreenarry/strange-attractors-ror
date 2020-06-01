@@ -3,6 +3,8 @@ import React, {useState} from 'react';
 import MathJax from 'react-mathjax';
 import styled from 'styled-components';
 
+import {round} from '../services/math';
+
 /*
 // TODO: Use these in whatever documentation I produce
 const xEquation = `
@@ -17,10 +19,6 @@ const polynomials = ['x_n', 'x_n^2', 'x_n y_n', 'y_n', 'y_n^2'];
 
 const DESIRED_SIG_DIGITS = 2;
 const MAX_POSSIBLE_DIGITS = 16;
-
-function round(value, digits) {
-  return Math.round(value * Math.pow(10, digits)) / Math.pow(10, digits);
-}
 
 function getMeaningfulCoefficient(coeff, digits = DESIRED_SIG_DIGITS) {
   if ([0, 1].includes(Math.abs(coeff))) {

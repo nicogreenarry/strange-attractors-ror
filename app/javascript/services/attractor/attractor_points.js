@@ -1,3 +1,5 @@
+import {round} from '../math';
+
 // 50 is somewhat arbitrary. Worth playing with it to find the best value.
 const IGNORE_FIRST_X_POINTS = 50;
 export const BORINGNESS_CHECK_FREQUENCY = 500;
@@ -73,9 +75,19 @@ export default class AttractorPoints {
   }
 
   _isBoring() {
+    // Check for overflow
     const [x, y] = this._getLastPoint();
     if (Math.max(Math.abs(x), Math.abs(y)) > 10 || Number.isNaN(x) || Number.isNaN(y)) {
       return { reason: 'Overflow' };
+    }
+
+    // Check for periodicity
+    // TODO investigate...apparently this is flagging the first saved attractor? And in fact a bunch of other attractors
+    const recentPoints = this.points.slice(-25).map(([x, y]) => [round(x, 3), round(y, 3)]);
+    const [lastX, lastY] = recentPoints.pop();
+    const matchingPoint = recentPoints.find(([x0, y0]) => x0 === lastX && y0 === lastY);
+    if (matchingPoint) {
+      return { reason: 'Periodicity' };
     }
 
     return null;
