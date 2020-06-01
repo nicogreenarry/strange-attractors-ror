@@ -18,15 +18,25 @@ export default class AttractorPoints {
   constructor({coefficients, initialCount = 0}) {
     this.coefficients = coefficients;
     this.points = [];
+    this.boring = false; // Will stop calculating more points if boring
+    this.boringReason = null;
     this.calculateMorePoints(initialCount);
   }
 
   calculateMorePoints(count = 1) {
+    if (this.boring) {
+      return;
+    }
     let [x0, y0] = this._getLastPoint() || [Math.random()/2 - .25, Math.random()/2 - .25];
     for (let i = 0; i < count; i++) {
       const [x1, y1] = calculateNextPoint(x0, y0, this.coefficients);
       this._addPoint(x1, y1);
       [x0, y0] = [x1, y1];
+      if (Math.max(Math.abs(x0), Math.abs(y0)) > 10) {
+        this.boring = true;
+        this.boringReason = 'Overflow';
+        break;
+      }
     }
   }
 

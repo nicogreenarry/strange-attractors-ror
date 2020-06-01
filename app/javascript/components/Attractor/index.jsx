@@ -26,7 +26,7 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax}) {
  */
 const Attractor = (props) => {
   const canvasEl = useRef(null);
-  const attractor = useMemo(() => {
+  const attractorPoints = useMemo(() => {
     return new AttractorPoints({
       coefficients: coefficientsFromLetters(props.coefficients),
       initialCount: 45000,
@@ -43,7 +43,7 @@ const Attractor = (props) => {
     ctx.fillStyle = 'green';
 
     // TODO: Pull a lot of this logic out into services
-    const points = attractor.getPointsForRendering();
+    const points = attractorPoints.getPointsForRendering();
     const {xMin, xMax, yMin, yMax} = points.reduce((bounds, [x, y]) => {
       bounds.xMin = Math.min(bounds.xMin, x);
       bounds.xMax = Math.max(bounds.xMax, x);
