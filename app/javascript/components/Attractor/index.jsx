@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import AttractorPoints from '../../services/attractor/attractor_points';
 import coefficientsFromLetters from '../../services/attractor/coefficients_from_letters';
 
@@ -18,34 +18,20 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax}) {
   return [canvasX, canvasY];
 }
 
-const someGoodAttractors = [
-  'amtmnqqxuyga',
-  'cvqkghqtphte',
-  'fircderrpvld',
-  'giietpiqrrul',
-  'glxoesfttpsv',
-  'gxqsnskeectx',
-  'hguhdphnsgoh',
-  'ilibvpkjwgrr',
-  'lufbbfisgjys',
-  'mcrbipophtbn',
-  'mdvaidoyhyea',
-  'odgqcnxodnya',
-  'qffvslmjjgcr',
-  'uwacxdqigkhf',
-  'vbwnbdelyhul',
-  'wncslflgihgl',
-];
-
+/*
+  props: {
+    coefficients: array of 12 integers
+    className?: string
+  }
+ */
 const Attractor = (props) => {
   const canvasEl = useRef(null);
   const attractor = useMemo(() => {
-    const goodAttractorIndex = Math.floor(Math.random() * someGoodAttractors.length);
     return new AttractorPoints({
-      coefficients: coefficientsFromLetters(someGoodAttractors[goodAttractorIndex]),
+      coefficients: coefficientsFromLetters(props.coefficients),
       initialCount: 45000,
     });
-  }, [props.coefficients]);
+  }, [...props.coefficients]);
 
   useEffect(() => {
     if (!canvasEl.current) {
@@ -53,6 +39,7 @@ const Attractor = (props) => {
     }
 
     const ctx = canvasEl.current.getContext('2d');
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
     ctx.fillStyle = 'green';
 
     // TODO: Pull a lot of this logic out into services
@@ -74,9 +61,15 @@ const Attractor = (props) => {
       attractorImageData.data[alphaIdx] = COLOR[3];
     });
     ctx.putImageData(attractorImageData, 0, 0);
-  }, [canvasEl.current]);
+  }, [canvasEl.current, props.coefficients]);
 
-  return <canvas ref={canvasEl} id="main-attractor" width={WIDTH} height={HEIGHT} />
+  return <canvas
+    ref={canvasEl}
+    id="main-attractor"
+    width={WIDTH}
+    height={HEIGHT}
+    className={props.className}
+  />
 };
 
 export default Attractor;
