@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import React from 'react';
 import MathJax from 'react-mathjax';
+import styled from 'styled-components';
 
 /*
 // TODO: Use these in whatever documentation I produce
@@ -43,8 +44,12 @@ function getTerms(coefficients) {
       return `${sign} ${Math.abs(coeff) === 1 ? '' : Math.abs(coeff)} ${polynomial}`;
     })
     .value();
-
 }
+
+const EquationContainer = styled.div`
+  // The equation doesn't render immediately, so a hard-coded height prevents the page from jumping around.
+  height: 7em; 
+`;
 
 const Equation = ({coefficients, startingCoordinates}) => {
   // Abbreviated coefficients
@@ -64,10 +69,10 @@ const Equation = ({coefficients, startingCoordinates}) => {
 
   return (
     <MathJax.Provider>
-      <div>
+      <EquationContainer>
         <MathJax.Node formula={xEquation} />
         <MathJax.Node formula={yEquation} />
-      </div>
+      </EquationContainer>
     </MathJax.Provider>
   );
 };
