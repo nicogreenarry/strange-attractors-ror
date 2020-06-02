@@ -1,5 +1,8 @@
+import {round} from '../math';
+
 // 50 is somewhat arbitrary. Worth playing with it to find the best value.
 const IGNORE_FIRST_X_POINTS = 50;
+export const BORINGNESS_CHECK_FREQUENCY = 500;
 
 function calculateNextPoint(x0, y0, c) {
   const x1 = c[0] + c[1] * x0 + c[2] * x0**2 + c[3] * x0 * y0 + c[4] * y0 + c[5] * y0**2;
@@ -16,7 +19,13 @@ export default class AttractorPoints {
       startingCoordinates: [number, number] - the x, y coordinates of the point to start with
    }
    */
-  constructor({coefficients, initialCount = 0, startingCoordinates}) {
+  constructor({
+    boringnessCheckFrequency = BORINGNESS_CHECK_FREQUENCY,
+    coefficients,
+    initialCount = 0,
+    startingCoordinates,
+  }) {
+    this.boringnessCheckFrequency = boringnessCheckFrequency;
     this.coefficients = coefficients;
     this.points = [];
     this.startingCoordinates = startingCoordinates;
@@ -34,11 +43,15 @@ export default class AttractorPoints {
       const [x1, y1] = calculateNextPoint(x0, y0, this.coefficients);
       this._addPoint(x1, y1);
       [x0, y0] = [x1, y1];
-      // TODO: Maybe this logic should be extracted out into some "boring test" function?
-      if (Math.max(Math.abs(x0), Math.abs(y0)) > 10) {
-        this.boring = true;
-        this.boringReason = 'Overflow';
-        break;
+
+      // Every so often, check for boringness
+      if (this.getCount() % this.boringnessCheckFrequency === 0) {
+        const boringness = this._isBoring();
+        if (boringness) {
+          this.boring = true;
+          this.boringReason = boringness.reason;
+          break;
+        }
       }
     }
   }
@@ -59,5 +72,24 @@ export default class AttractorPoints {
 
   _getLastPoint() {
     return this.points[this.getCount() - 1];
+  }
+
+  _isBoring() {
+    // Check for overflow
+    const [x, y] = this._getLastPoint();
+    if (Math.max(Math.abs(x), Math.abs(y)) > 10 || Number.isNaN(x) || Number.isNaN(y)) {
+      return { reason: 'Overflow' };
+    }
+
+    // Check for periodicity
+    // TODO investigate...apparently this is flagging the first saved attractor? And in fact a bunch of other attractors
+    const recentPoints = this.points.slice(-25).map(([x, y]) => [round(x, 3), round(y, 3)]);
+    const [lastX, lastY] = recentPoints.pop();
+    const matchingPoint = recentPoints.find(([x0, y0]) => x0 === lastX && y0 === lastY);
+    if (matchingPoint) {
+      return { reason: 'Periodicity' };
+    }
+
+    return null;
   }
 }
