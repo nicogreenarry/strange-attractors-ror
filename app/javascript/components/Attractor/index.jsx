@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import AttractorPoints from '../../services/attractor/attractor_points';
+import Equation from '../Equation';
 
 const WIDTH = 500;
 const HEIGHT = 500;
@@ -65,13 +66,18 @@ const Attractor = (props) => {
     ctx.putImageData(attractorImageData, 0, 0);
   }, [canvasEl.current, props.coefficients]);
 
-  return <canvas
-    ref={canvasEl}
-    id="main-attractor"
-    width={WIDTH}
-    height={HEIGHT}
-    className={props.className}
-  />
+  return (
+    <>
+      {props.showEquation && <Equation {...props} className="mb-3" />}
+      <canvas
+        ref={canvasEl}
+        id="main-attractor"
+        width={WIDTH}
+        height={HEIGHT}
+        className={props.className}
+      />
+    </>
+  );
 };
 
 export default Attractor;

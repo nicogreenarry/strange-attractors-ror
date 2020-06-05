@@ -35,7 +35,7 @@ export default () => {
   }, [coefficientsIdx]);
 
   return (
-    <div className="vw-100 vh-100 primary-color d-flex flex-column align-items-center justify-content-center">
+    <div className="primary-color d-flex flex-column align-items-center justify-content-center">
       <div className="container secondary-color text-center">
         <h1 className="display-4">Strange Attractors</h1>
         <p className="lead">
@@ -44,9 +44,9 @@ export default () => {
       </div>
       <Attractor
         {...attractorPointProps}
+        showEquation={true}
         className="mb-3"
       />
-      <Equation {...attractorPointProps} className="mb-3" />
 
       <div className="flex">
         <button
