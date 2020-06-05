@@ -8,7 +8,7 @@ const HEIGHT = 500;
 const COLOR = [15, 12, 156, 255]; // RGBA color
 
 function getColorIndicesForCoord(x, y, width) {
-  var red = y * (width * 4) + x * 4;
+  const red = y * (width * 4) + x * 4;
   return [red, red + 1, red + 2, red + 3];
 }
 
@@ -20,21 +20,21 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax}) {
 
 /*
   props: {
-    coefficients: array of 12 integers
-    startingCoordinates: [number, number] - the x, y coordinates of the point to start with
-
     className?: string
+    coefficients: array of 12 integers
+    showEquation?: boolean
+    startingCoordinates: [number, number] - the x, y coordinates of the point to start with
   }
  */
-const Attractor = (props) => {
+const Attractor = ({className, coefficients, showEquation, startingCoordinates}) => {
   const canvasEl = useRef(null);
   const attractorPoints = useMemo(() => {
     return new AttractorPoints({
-      coefficients: props.coefficients,
+      coefficients: coefficients,
       initialCount: 45000,
-      startingCoordinates: props.startingCoordinates,
+      startingCoordinates: startingCoordinates,
     });
-  }, [...props.coefficients]);
+  }, [...coefficients]);
 
   useEffect(() => {
     if (!canvasEl.current) {
@@ -64,17 +64,23 @@ const Attractor = (props) => {
       attractorImageData.data[alphaIdx] = COLOR[3];
     });
     ctx.putImageData(attractorImageData, 0, 0);
-  }, [canvasEl.current, props.coefficients]);
+  }, [canvasEl.current, coefficients]);
 
   return (
     <>
-      {props.showEquation && <Equation {...props} className="mb-3" />}
+      {showEquation && (
+        <Equation
+          coefficients={coefficients}
+          startingCoordinates={startingCoordinates}
+          className="mb-3"
+        />
+      )}
       <canvas
         ref={canvasEl}
         id="main-attractor"
         width={WIDTH}
         height={HEIGHT}
-        className={props.className}
+        className={className}
       />
     </>
   );
