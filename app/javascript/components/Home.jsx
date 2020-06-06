@@ -31,6 +31,9 @@ export default () => {
               {...attractorPointProps}
               showEquation={true}
               className="mb-3"
+              initialCount={45000}
+              width={500}
+              height={500}
             />
           )
       }
