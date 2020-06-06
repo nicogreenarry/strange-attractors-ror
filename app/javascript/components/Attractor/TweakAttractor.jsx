@@ -1,6 +1,11 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import Attractor from './';
+
+const AttractorContainer = styled.div`
+  // TODO: grid item
+`;
 
 function tweakNumbers({coefficients, n, startingCoordinates, sensitivity = .05}) {
   const results = [];
@@ -19,11 +24,13 @@ const TweakAttractor = ({coefficients, startingCoordinates}) => {
   return (
     <div>
       {tweakedResults.map(({coefficients: tweakedCoefficients, startingCoordinates: tweakedStartingCoordinates}) => (
-        <Attractor
-          coefficients={tweakedCoefficients}
-          showEquation={false}
-          startingCoordinates={tweakedStartingCoordinates}
-        />
+        <AttractorContainer key={tweakedCoefficients.join(',')}>
+          <Attractor
+            coefficients={tweakedCoefficients}
+            showEquation={false}
+            startingCoordinates={tweakedStartingCoordinates}
+          />
+        </AttractorContainer>
       ))}
     </div>
   );
