@@ -1,39 +1,37 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import AttractorPoints from '../../services/attractor/attractor_points';
-
-const WIDTH = 500;
-const HEIGHT = 500;
+import Equation from '../Equation';
 
 const COLOR = [15, 12, 156, 255]; // RGBA color
 
 function getColorIndicesForCoord(x, y, width) {
-  var red = y * (width * 4) + x * 4;
+  const red = y * (width * 4) + x * 4;
   return [red, red + 1, red + 2, red + 3];
 }
 
-function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax}) {
-  const canvasX = Math.round((x - xMin) / (xMax - xMin) * (WIDTH - 1));
-  const canvasY = HEIGHT - Math.round((y - yMin) / (yMax - yMin) * (HEIGHT - 1)) - 1;
+function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height}) {
+  const canvasX = Math.round((x - xMin) / (xMax - xMin) * (width - 1));
+  const canvasY = height - Math.round((y - yMin) / (yMax - yMin) * (height - 1)) - 1;
   return [canvasX, canvasY];
 }
 
 /*
   props: {
-    coefficients: array of 12 integers
-    startingCoordinates: [number, number] - the x, y coordinates of the point to start with
-
     className?: string
+    coefficients: array of 12 integers
+    showEquation?: boolean
+    startingCoordinates: [number, number] - the x, y coordinates of the point to start with
   }
  */
-const Attractor = (props) => {
+const Attractor = ({className, coefficients, initialCount, showEquation, startingCoordinates, width, height}) => {
   const canvasEl = useRef(null);
   const attractorPoints = useMemo(() => {
     return new AttractorPoints({
-      coefficients: props.coefficients,
-      initialCount: 45000,
-      startingCoordinates: props.startingCoordinates,
+      coefficients: coefficients,
+      initialCount,
+      startingCoordinates: startingCoordinates,
     });
-  }, [...props.coefficients]);
+  }, [...coefficients]);
 
   useEffect(() => {
     if (!canvasEl.current) {
@@ -41,7 +39,7 @@ const Attractor = (props) => {
     }
 
     const ctx = canvasEl.current.getContext('2d');
-    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = 'green';
 
     // TODO: Pull a lot of this logic out into services
@@ -53,25 +51,36 @@ const Attractor = (props) => {
       bounds.yMax = Math.max(bounds.yMax, y);
       return bounds;
     }, {xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity});
-    const attractorImageData = ctx.createImageData(WIDTH, HEIGHT);
+    const attractorImageData = ctx.createImageData(width, height);
     points.forEach(([x, y]) => {
-      const [canvasX, canvasY] = getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax});
-      const [redIdx, greenIdx, blueIdx, alphaIdx] = getColorIndicesForCoord(canvasX, canvasY, WIDTH);
+      const [canvasX, canvasY] = getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height});
+      const [redIdx, greenIdx, blueIdx, alphaIdx] = getColorIndicesForCoord(canvasX, canvasY, width);
       attractorImageData.data[redIdx] = COLOR[0];
       attractorImageData.data[greenIdx] = COLOR[1];
       attractorImageData.data[blueIdx] = COLOR[2];
       attractorImageData.data[alphaIdx] = COLOR[3];
     });
     ctx.putImageData(attractorImageData, 0, 0);
-  }, [canvasEl.current, props.coefficients]);
+  }, [canvasEl.current, coefficients]);
 
-  return <canvas
-    ref={canvasEl}
-    id="main-attractor"
-    width={WIDTH}
-    height={HEIGHT}
-    className={props.className}
-  />
+  return (
+    <>
+      {showEquation && (
+        <Equation
+          coefficients={coefficients}
+          startingCoordinates={startingCoordinates}
+          className="mb-3"
+        />
+      )}
+      <canvas
+        ref={canvasEl}
+        id="main-attractor"
+        width={width}
+        height={height}
+        className={className}
+      />
+    </>
+  );
 };
 
 export default Attractor;
