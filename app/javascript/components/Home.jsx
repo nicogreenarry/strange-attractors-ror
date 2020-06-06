@@ -1,31 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Attractor from './Attractor';
-import coefficientsFromLetters from '../services/attractor/coefficients_from_letters';
 import findInterestingCoefficients from '../services/attractor/find_interesting_coefficients';
-
-import Equation from './Equation';
-
-const someGoodAttractors = [
-  'amtmnqqxuyga',
-  'cvqkghqtphte',
-  'fircderrpvld',
-  'giietpiqrrul',
-  'glxoesfttpsv',
-  'gxqsnskeectx',
-  'hguhdphnsgoh',
-  'ilibvpkjwgrr',
-  'lufbbfisgjys',
-  'mcrbipophtbn',
-  'mdvaidoyhyea',
-  'odgqcnxodnya',
-  'qffvslmjjgcr',
-  'uwacxdqigkhf',
-  'vbwnbdelyhul',
-  'wncslflgihgl',
-].map(letters => ({
-  coefficients: coefficientsFromLetters(letters),
-  startingCoordinates: [0, 0],
-}));
+import {someGoodAttractors} from '../services/attractor/saved_sets';
 
 export default () => {
   const [coefficientsIdx, setCoefficientsIdx] = useState(0);
