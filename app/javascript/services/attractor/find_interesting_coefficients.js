@@ -9,7 +9,7 @@ function createAttractorPoints() {
     boringnessCheckFrequency: 10, // Randomly-generated sets are much more likely to get boring very fast
     coefficients,
     startingCoordinates,
-    initialCount: 500, // Should be plenty to discover whether the set is boring
+    initialCount: 2000,
   });
 }
 
