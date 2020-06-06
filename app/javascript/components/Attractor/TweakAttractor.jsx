@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import Attractor from './';
@@ -21,8 +21,14 @@ function tweakNumbers({coefficients, n, startingCoordinates, sensitivity = .05})
   return results;
 }
 
-const TweakAttractor = ({className, coefficients, startingCoordinates}) => {
-  const tweakedResults = tweakNumbers({coefficients, n: 9, sensitivity: .02, startingCoordinates});
+const TweakAttractor = ({cacheId, className, coefficients, startingCoordinates}) => {
+  function generateTweakedResults() {
+    return tweakNumbers({coefficients, n: 9, sensitivity: .02, startingCoordinates});
+  }
+  const [tweakedResults, setTweakedResults] = useState(generateTweakedResults);
+  useEffect(() => {
+    setTweakedResults(generateTweakedResults());
+  }, [cacheId, ...coefficients, ...startingCoordinates]);
 
   return (
     <Grid className={className}>

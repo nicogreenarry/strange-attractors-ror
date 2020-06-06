@@ -13,6 +13,7 @@ export default () => {
   }, [coefficientsIdx]);
 
   const [tweakMode, setTweakMode] = useState(false);
+  const [cacheId, setCacheId] = useState(0); // Ultimately this will be based on something like the history length
 
   return (
     <div className="primary-color d-flex flex-column align-items-center justify-content-center">
@@ -25,7 +26,7 @@ export default () => {
       {
         tweakMode
           ? (
-            <TweakAttractor {...attractorPointProps} className="mb-3" />
+            <TweakAttractor cacheId={cacheId} {...attractorPointProps} className="mb-3" />
           ) : (
             <Attractor
               {...attractorPointProps}
@@ -62,6 +63,7 @@ export default () => {
           className="btn btn-outline-primary mx-2"
           onClick={() => {
             setTweakMode(true);
+            setCacheId(prev => prev + 1);
           }}
         >
           Tweak this attractor
