@@ -3,12 +3,16 @@ import Attractor from './Attractor';
 import findInterestingCoefficients from '../services/attractor/find_interesting_coefficients';
 import {someGoodAttractors} from '../services/attractor/saved_sets';
 
+import TweakAttractor from './Attractor/TweakAttractor';
+
 export default () => {
   const [coefficientsIdx, setCoefficientsIdx] = useState(0);
   const [attractorPointProps, setAttractorPointProps] = useState(someGoodAttractors[coefficientsIdx]);
   useEffect(() => {
     setAttractorPointProps(someGoodAttractors[coefficientsIdx]);
   }, [coefficientsIdx]);
+
+  const [tweakMode, setTweakMode] = useState(false);
 
   return (
     <div className="primary-color d-flex flex-column align-items-center justify-content-center">
@@ -18,27 +22,46 @@ export default () => {
           Math is beautiful!
         </p>
       </div>
-      <Attractor
-        {...attractorPointProps}
-        showEquation={true}
-        className="mb-3"
-      />
+      {
+        tweakMode
+          ? (
+            <TweakAttractor {...attractorPointProps} className="mb-3" />
+          ) : (
+            <Attractor
+              {...attractorPointProps}
+              showEquation={true}
+              className="mb-3"
+            />
+          )
+      }
 
-      <div className="flex">
+      <div className="flex mb-4">
         <button
           className="btn btn-primary mx-2"
-          onClick={() => setCoefficientsIdx(prevIdx => (prevIdx + 1) % someGoodAttractors.length)}
+          onClick={() => {
+            setTweakMode(false);
+            setCoefficientsIdx(prevIdx => (prevIdx + 1) % someGoodAttractors.length);
+          }}
         >
           Next saved attractor
         </button>
         <button
           className="btn btn-outline-primary mx-2"
           onClick={() => {
+            setTweakMode(false);
             const attractorPoints = findInterestingCoefficients();
             setAttractorPointProps(attractorPoints);
           }}
         >
           Generate new attractor
+        </button>
+        <button
+          className="btn btn-outline-primary mx-2"
+          onClick={() => {
+            setTweakMode(true);
+          }}
+        >
+          Tweak this attractor
         </button>
       </div>
     </div>
