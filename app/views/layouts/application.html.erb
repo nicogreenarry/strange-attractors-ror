@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Strange Attractors</title>
+    <title>
+      <%= "#{yield(:title).present? ? yield(:title) + ' | ' : ''}Strange Attractors" %>
+    </title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
