@@ -6,7 +6,7 @@ import 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import App from "../components/App";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("turbolinks:load", () => {
   render(
     <App />,
     document.body.appendChild(document.createElement("div"))
