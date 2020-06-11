@@ -12,21 +12,25 @@
   </head>
 
   <body>
-    <div class="d-flex justify-content-between navbar">
-      <ul class="navbar-nav flex-row">
-        <li class="nav-item">
-          <a class="nav-link mx-2" href="/">Strange Attractors</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav flex-row">
-        <li class="nav-item">
-          <a class="nav-link mx-2" href="/static_pages/what_are_strange_attractors">What are Strange Attractors?</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link mx-2" href="/static_pages/about">About</a>
-        </li>
-      </ul>
+    <header>
+      <nav class="d-flex justify-content-between navbar">
+        <ul class="navbar-nav flex-row">
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="/">Strange Attractors</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav flex-row">
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="/static_pages/what_are_strange_attractors">What are Strange Attractors?</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-2" href="/static_pages/about">About</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <div class="container">
+      <%= yield %>
     </div>
-    <%= yield %>
   </body>
 </html>
