@@ -1,2 +1,23 @@
-<h1>Sessions#new</h1>
-<p>Find me in app/views/sessions/new.html.erb</p>
+<% provide(:title, 'Log in') %>
+<div class="primary-color d-flex flex-column justify-content-center pt-4">
+  <header class="container secondary-color text-center">
+    <h1 class="display-4 mb-4">Log in</h1>
+  </header>
+  <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
+    <%= form_with(url: login_path, scope: :session, local: true, class: "d-flex flex-column justify-content-center") do |f| %>
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password %>
+        <%= f.password_field :password, class: "form-control" %>
+      </div>
+
+      <%= f.submit "Log in", class: "btn btn-primary mt-3" %>
+    <% end %>
+
+    <p>New user? <%= link_to "Sign up now!", signup_path %></p>
+  </section>
+</div>
