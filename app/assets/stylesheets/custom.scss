@@ -1,8 +1,36 @@
 @import 'bootstrap/scss/bootstrap';
 
+/* Mixins, variables, etc. */
+
+$state-danger-text: red;
+
+@mixin box_sizing {
+  -moz-box-sizing:    border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing:         border-box;
+}
+
+/* Generic styles */
+
 .primary-color {
   background-color: #FFFFFF;
 }
 .secondary-color {
   color: #293241;
+}
+
+  /* forms */
+#error_explanation {
+  color: red;
+  ul {
+    color: red;
+    margin: 0 0 30px 0;
+  }
+}
+
+.field_with_errors {
+  @extend .is-invalid;
+  .form-control, label {
+    color: $state-danger-text;
+  }
 }
