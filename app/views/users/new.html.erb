@@ -5,6 +5,8 @@
   </header>
   <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
     <%= form_with(model: @user, local: true, class: "d-flex flex-column justify-content-center") do |f| %>
+      <%= render 'shared/error_messages' %>
+
       <div class="form-group">
         <%= f.label :name %>
         <%= f.text_field :name, class: "form-control" %>
