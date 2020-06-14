@@ -1,5 +1,15 @@
 @import 'bootstrap/scss/bootstrap';
 
+/* Mixins, variables, etc. */
+
+@mixin box_sizing {
+  -moz-box-sizing:    border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing:         border-box;
+}
+
+/* Generic styles */
+
 .primary-color {
   background-color: #FFFFFF;
 }
