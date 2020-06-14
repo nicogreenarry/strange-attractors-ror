@@ -4,7 +4,7 @@
     <h1 class="display-4 mb-4">Sign up</h1>
   </header>
   <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
-    <%= form_with(model: @user, local: true, class: "d-flex flex-column justify-content-center") do |f| %>
+    <%= form_with(url: signup_path, scope: :user, local: true, class: "d-flex flex-column justify-content-center") do |f| %>
       <%= render 'shared/error_messages' %>
 
       <div class="form-group">
