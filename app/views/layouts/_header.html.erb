@@ -12,12 +12,29 @@
       <li class="nav-item">
         <%= link_to "About", about_path, class: "nav-link mx-2" %>
       </li>
-      <li class="nav-item d-none">
-        <%= link_to "Sign up", signup_path, class: "btn btn-primary mx-2" %>
-      </li>
-      <li class="nav-item d-none">
-        <%= link_to "Log in", "#", class: "btn btn-outline-primary mx-2" %>
-      </li>
+      <% if logged_in? %>
+        <li class="nav-item">
+          <%= link_to "Users", '#', class: "nav-link mx-2" %>
+        </li>
+        <div class="dropdown">
+          <a href="#" class="dropdown-toggle nav-link mx-2" data-toggle="dropdown">
+            Account <b class="caret"></b>
+          </a>
+          <div class="dropdown-menu">
+            <%= link_to "Profile", current_user %>
+            <%= link_to "Settings", '#' %>
+            <div class="dropdown-divider"></div>
+            <%= link_to "Log out", logout_path, method: :delete %>
+          </div>
+        </div>
+      <% else %>
+        <li class="nav-item d-none">
+          <%= link_to "Sign up", signup_path, class: "btn btn-primary mx-2" %>
+        </li>
+        <li class="nav-item d-none">
+          <%= link_to "Log in", login_path, class: "btn btn-outline-primary mx-2" %>
+        </li>
+      <% end %>
     </ul>
   </nav>
 </header>
