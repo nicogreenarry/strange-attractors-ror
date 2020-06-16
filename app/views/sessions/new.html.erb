@@ -1,17 +1,10 @@
-<% provide(:title, 'Sign up') %>
+<% provide(:title, 'Log in') %>
 <div class="primary-color d-flex flex-column justify-content-center pt-4">
   <header class="container secondary-color text-center">
-    <h1 class="display-4 mb-4">Sign up</h1>
+    <h1 class="display-4 mb-4">Log in</h1>
   </header>
   <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
-    <%= form_with(url: signup_path, scope: :user, local: true, class: "d-flex flex-column justify-content-center") do |f| %>
-      <%= render 'shared/error_messages' %>
-
-      <div class="form-group">
-        <%= f.label :name %>
-        <%= f.text_field :name, class: "form-control" %>
-      </div>
-
+    <%= form_with(url: login_path, scope: :session, local: true, class: "d-flex flex-column justify-content-center") do |f| %>
       <div class="form-group">
         <%= f.label :email %>
         <%= f.email_field :email, class: "form-control" %>
@@ -22,9 +15,9 @@
         <%= f.password_field :password, class: "form-control" %>
       </div>
 
-      <%= f.submit "Create my account", class: "btn btn-primary mt-3" %>
+      <%= f.submit "Log in", class: "btn btn-primary mt-3" %>
     <% end %>
 
-    <p>Existing user? <%= link_to "Log in now!", login_path %></p>
+    <p>New user? <%= link_to "Sign up now!", signup_path %></p>
   </section>
 </div>
