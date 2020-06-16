@@ -1,5 +1,3 @@
-@import 'bootstrap/scss/bootstrap';
-
 /* Mixins, variables, etc. */
 
 $state-danger-text: red;
@@ -29,7 +27,6 @@ $state-danger-text: red;
 }
 
 .field_with_errors {
-  @extend .is-invalid;
   .form-control, label {
     color: $state-danger-text;
   }
