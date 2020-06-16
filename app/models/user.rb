@@ -25,4 +25,9 @@ class User < ApplicationRecord
     self.remember_token = SecureRandom.urlsafe_base64
     update_attribute(:remember_digest, User.digest(remember_token))
   end
+
+  # Forgets a user's persistent session
+  def forget
+    update_attribute(:remember_digest, nil)
+  end
 end
