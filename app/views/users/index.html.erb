@@ -7,9 +7,7 @@
     <%= will_paginate %>
     <div class="users d-flex flex-column mb-3">
       <% @users.each do |user| %>
-        <div class="user">
-          <%= link_to user.name, user %>
-        </div>
+        <%= render user %>
       <% end %>
     </div>
     <%= will_paginate %>
