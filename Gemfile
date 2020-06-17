@@ -14,9 +14,13 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'react-rails', '~> 2.6.1'
 
+gem 'will_paginate', '~> 3.3.0'
+gem 'will_paginate-bootstrap4', '~> 0.2.2'
+
 group :development, :test do
-  gem 'sqlite3', '~> 1.4.1'
   gem 'byebug',  '~> 11.0.1', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'faker', '~> 2.11.0'
+  gem 'sqlite3', '~> 1.4.1'
 end
 
 group :development do

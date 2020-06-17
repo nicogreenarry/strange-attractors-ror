@@ -19,7 +19,7 @@ $state-danger-text: red;
   color: #293241;
 }
 
-  /* forms */
+/* forms */
 #error_explanation {
   color: red;
   ul {
@@ -31,5 +31,17 @@ $state-danger-text: red;
 .field_with_errors {
   .form-control, label {
     color: $state-danger-text;
+  }
+}
+
+/* Users */
+.users {
+  .user {
+    padding: 5px;
+    border-bottom: 1px solid lightgray;
+  }
+
+  .user:last-child {
+    border-bottom: none;
   }
 }
