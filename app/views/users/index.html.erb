@@ -5,7 +5,7 @@
   </header>
   <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
     <%= will_paginate %>
-    <div class="users d-flex flex-column">
+    <div class="users d-flex flex-column mb-3">
       <% @users.each do |user| %>
         <div class="user">
           <%= link_to user.name, user %>

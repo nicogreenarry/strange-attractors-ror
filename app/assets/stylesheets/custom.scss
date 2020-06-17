@@ -40,4 +40,8 @@ $state-danger-text: red;
     padding: 5px;
     border-bottom: 1px solid lightgray;
   }
+
+  .user:last-child {
+    border-bottom: none;
+  }
 }
