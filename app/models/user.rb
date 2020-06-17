@@ -8,7 +8,8 @@ class User < ApplicationRecord
             format: { with: /.+@.+/ },
             uniqueness: true
   validates :name, presence: true, length: { maximum: 255 }
-  validates :password, presence: true, length: { minimum: 8 } # Maximum length is enforced by has_secure_password
+  # Maximum password length is enforced by has_secure_password, so we don't need to specify it.
+  validates :password, presence: true, length: { minimum: 8 }, allow_nil: true
 
   has_secure_password
 

@@ -1,0 +1,33 @@
+<% provide(:title, "Update profile") %>
+<div class="primary-color d-flex flex-column justify-content-center pt-4">
+  <header class="container secondary-color text-center">
+    <h1 class="display-4 mb-4">Update your profile</h1>
+  </header>
+  <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
+    <%= form_with(model: @user, local: true) do |f| %>
+      <%= render 'shared/error_messages' %>
+
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password %>
+        <%= f.password_field :password, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, "Confirmation" %>
+        <%= f.password_field :password_confirmation, class: 'form-control' %>
+      </div>
+
+      <%= f.submit "Save changes", class: "btn btn-primary mt-3" %>
+    <% end %>
+  </section>
+</div>
