@@ -4,6 +4,7 @@
     <h1 class="display-4 mb-4">All users</h1>
   </header>
   <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
+    <%= will_paginate %>
     <div class="users d-flex flex-column">
       <% @users.each do |user| %>
         <div class="user">
@@ -11,5 +12,6 @@
         </div>
       <% end %>
     </div>
+    <%= will_paginate %>
   </section>
 </div>
