@@ -6,7 +6,9 @@
   <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
     <div class="users d-flex flex-column">
       <% @users.each do |user| %>
-        <%= link_to user.name, user %>
+        <div class="user">
+          <%= link_to user.name, user %>
+        </div>
       <% end %>
     </div>
   </section>
