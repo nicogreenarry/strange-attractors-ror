@@ -1,10 +1,10 @@
-import React from "react";
-import { render } from "react-dom";
-import App from "../components/App";
+import React from 'react';
+import { render } from 'react-dom';
+import App from '../components/App';
 
-document.addEventListener("turbolinks:load", () => {
+document.addEventListener('turbolinks:load', () => {
   render(
     <App />,
-    document.body.appendChild(document.createElement("div"))
+    document.body.appendChild(document.createElement('div'))
   );
 });
