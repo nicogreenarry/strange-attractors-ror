@@ -1,0 +1,7 @@
+<div>
+  <p><strong>RENDER ATTRACTOR HERE</strong></p>
+  <p class="user"><%= link_to attractor.user.name, attractor.user %></p>
+  <p class="timestamp">
+    Discovered <%= time_ago_in_words(attractor.created_at) %> ago.
+  </p>
+</div>
