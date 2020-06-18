@@ -19,6 +19,7 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height}) {
   props: {
     className?: string
     coefficients: array of 12 integers
+    initialCount: integer; the number of points that will be rendered
     showEquation?: boolean
     startXy: [number, number] - the x, y coordinates of the point to start with
     width: integer
@@ -76,7 +77,6 @@ const Attractor = ({className, coefficients, initialCount, showEquation, startXy
       )}
       <canvas
         ref={canvasEl}
-        id="main-attractor"
         width={width}
         height={height}
         className={className}
