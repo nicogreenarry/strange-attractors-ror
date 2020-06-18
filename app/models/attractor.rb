@@ -8,11 +8,11 @@ class Attractor < ApplicationRecord
   default_scope -> { order(created_at: :desc) }
 
   private def details_have_valid_parameters
-    if details&.coefficients&.length != 12
+    if details&.[]("coefficients")&.length != 12
       errors.add(:details, "must have 12 coefficients")
     end
 
-    if details&.start_xy&.length != 2
+    if details&.[]("start_xy")&.length != 2
       errors.add(:details, "must have 2 starting coordinates")
     end
   end
