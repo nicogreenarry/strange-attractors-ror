@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  parameters: 
+  featured_at: 2020-06-17 21:51:26
+
+two:
+  user: two
+  parameters: 
+  featured_at: 2020-06-17 21:51:26
