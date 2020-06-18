@@ -12,7 +12,7 @@ class Attractor < ApplicationRecord
       errors.add(:details, "must have 12 coefficients")
     end
 
-    if details&.[]("start_xy")&.length != 2
+    if details&.[]("startXy")&.length != 2
       errors.add(:details, "must have 2 starting coordinates")
     end
   end
