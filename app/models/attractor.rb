@@ -5,6 +5,8 @@ class Attractor < ApplicationRecord
   validates :details, presence: true
   validate :details_have_valid_parameters
 
+  default_scope -> { order(created_at: :desc) }
+
   private def details_have_valid_parameters
     if details&.coefficients&.length != 12
       errors.add(:details, "must have 12 coefficients")
