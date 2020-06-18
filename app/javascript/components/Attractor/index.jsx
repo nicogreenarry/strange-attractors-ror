@@ -21,6 +21,8 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height}) {
     coefficients: array of 12 integers
     showEquation?: boolean
     startingCoordinates: [number, number] - the x, y coordinates of the point to start with
+    width: integer
+    height: integer
   }
  */
 const Attractor = ({className, coefficients, initialCount, showEquation, startingCoordinates, width, height}) => {
