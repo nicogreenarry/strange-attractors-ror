@@ -24,22 +24,6 @@ export default () => {
         </p>
       </header>
       <section>
-        {
-          tweakMode
-            ? (
-              <TweakAttractor cacheId={cacheId} {...attractorPointProps} className="mb-3" />
-            ) : (
-              <Attractor
-                {...attractorPointProps}
-                showEquation={true}
-                className="mb-3"
-                initialCount={45000}
-                width={500}
-                height={500}
-              />
-            )
-        }
-
         <div className="flex mb-4">
           <button
             className="btn btn-primary mx-2"
@@ -70,6 +54,21 @@ export default () => {
             Tweak this attractor
           </button>
         </div>
+        {
+          tweakMode
+            ? (
+              <TweakAttractor cacheId={cacheId} {...attractorPointProps} className="mb-3" />
+            ) : (
+              <Attractor
+                {...attractorPointProps}
+                showEquation={true}
+                className="mb-3"
+                initialCount={45000}
+                width={500}
+                height={500}
+              />
+            )
+        }
       </section>
     </div>
   );
