@@ -10,34 +10,34 @@ const Grid = styled.div`
   grid-gap: 1em;
 `;
 
-function tweakNumbers({coefficients, n, startingCoordinates, sensitivity = .05}) {
+function tweakNumbers({coefficients, n, startXy, sensitivity = .05}) {
   const results = [];
   for (let i = 0; i < n; i++) {
     results.push({
       coefficients: coefficients.map(num => num + (Math.random() * sensitivity - sensitivity/2)),
-      startingCoordinates: startingCoordinates.map(num => num + (Math.random() * sensitivity - sensitivity/2)),
+      startXy: startXy.map(num => num + (Math.random() * sensitivity - sensitivity/2)),
     });
   }
   return results;
 }
 
-const TweakAttractor = ({cacheId, className, coefficients, startingCoordinates}) => {
+const TweakAttractor = ({cacheId, className, coefficients, startXy}) => {
   function generateTweakedResults() {
-    return tweakNumbers({coefficients, n: 9, sensitivity: .02, startingCoordinates});
+    return tweakNumbers({coefficients, n: 9, sensitivity: .02, startXy});
   }
   const [tweakedResults, setTweakedResults] = useState(generateTweakedResults);
   useEffect(() => {
     setTweakedResults(generateTweakedResults());
-  }, [cacheId, ...coefficients, ...startingCoordinates]);
+  }, [cacheId, ...coefficients, ...startXy]);
 
   return (
     <Grid className={className}>
-      {tweakedResults.map(({coefficients: tweakedCoefficients, startingCoordinates: tweakedStartingCoordinates}) => (
+      {tweakedResults.map(({coefficients: tweakedCoefficients, startXy: tweakedStartXy}) => (
         <div key={tweakedCoefficients.join(',')}>
           <Attractor
             coefficients={tweakedCoefficients}
             showEquation={false}
-            startingCoordinates={tweakedStartingCoordinates}
+            startXy={tweakedStartXy}
             initialCount={30000}
             width={300}
             height={300}

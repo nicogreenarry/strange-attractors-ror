@@ -19,17 +19,20 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height}) {
   props: {
     className?: string
     coefficients: array of 12 integers
+    initialCount: integer; the number of points that will be rendered
     showEquation?: boolean
-    startingCoordinates: [number, number] - the x, y coordinates of the point to start with
+    startXy: [number, number] - the x, y coordinates of the point to start with
+    width: integer
+    height: integer
   }
  */
-const Attractor = ({className, coefficients, initialCount, showEquation, startingCoordinates, width, height}) => {
+const Attractor = ({className, coefficients, initialCount, showEquation, startXy, width, height}) => {
   const canvasEl = useRef(null);
   const attractorPoints = useMemo(() => {
     return new AttractorPoints({
       coefficients: coefficients,
       initialCount,
-      startingCoordinates: startingCoordinates,
+      startXy,
     });
   }, [...coefficients]);
 
@@ -68,13 +71,12 @@ const Attractor = ({className, coefficients, initialCount, showEquation, startin
       {showEquation && (
         <Equation
           coefficients={coefficients}
-          startingCoordinates={startingCoordinates}
+          startXy={startXy}
           className="mb-3"
         />
       )}
       <canvas
         ref={canvasEl}
-        id="main-attractor"
         width={width}
         height={height}
         className={className}

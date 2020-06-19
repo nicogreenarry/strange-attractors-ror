@@ -1,0 +1,10 @@
+<div class="user-profile__attractor__container">
+  <%= react_component("Attractor/index", { coefficients: attractor.details["coefficients"],
+                                           startXy: attractor.details["startXy"],
+                                           showEquation: false,
+                                           initialCount: 30000,
+                                           width: 300, height: 300 }) %>
+  <p class="mb-0">
+    <%= link_to attractor.user.name, attractor.user %> | Discovered <%= time_ago_in_words(attractor.created_at) %> ago.
+  </p>
+</div>

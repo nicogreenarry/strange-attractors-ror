@@ -59,7 +59,7 @@ const CenteredText = styled.p`
   text-align: center;
 `;
 
-const Equation = ({coefficients, startingCoordinates, className}) => {
+const Equation = ({coefficients, startXy, className}) => {
   const [detailsExpanded, setDetailsExpanded] = useState(false);
 
   // Abbreviated coefficients
@@ -99,7 +99,7 @@ const Equation = ({coefficients, startingCoordinates, className}) => {
           </CenteredText>
           <CenteredText>
             Starting point:<br />
-            x: {startingCoordinates[0]}, y: {startingCoordinates[1]}
+            x: {startXy[0]}, y: {startXy[1]}
           </CenteredText>
         </>
       )}

@@ -1,1 +1,15 @@
-<%= @user.name %>
+<div class="primary-color d-flex flex-column justify-content-center pt-4">
+  <header class="container secondary-color text-center">
+    <h1 class="display-4 mb-4"><%= @user.name %></h1>
+  </header>
+  <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
+    <% if @user.attractors.any? %>
+      <h3 class="mb-3">Attractors (<%= @user.attractors.count %>)</h3>
+      <%= will_paginate @attractors %>
+      <div class="attractors d-flex flex-column">
+        <%= render @attractors %>
+      </div>
+      <%= will_paginate @attractors %>
+    <% end %>
+  </section>
+</div>

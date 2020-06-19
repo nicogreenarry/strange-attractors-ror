@@ -16,19 +16,19 @@ export default class AttractorPoints {
     props: {
       coefficients: array of 12 numbers
       initialCount?: integer. How many points to initially calculate.
-      startingCoordinates: [number, number] - the x, y coordinates of the point to start with
+      startXy: [number, number] - the x, y coordinates of the point to start with
    }
    */
   constructor({
     boringnessCheckFrequency = BORINGNESS_CHECK_FREQUENCY,
     coefficients,
     initialCount = 0,
-    startingCoordinates,
+    startXy,
   }) {
     this.boringnessCheckFrequency = boringnessCheckFrequency;
     this.coefficients = coefficients;
     this.points = [];
-    this.startingCoordinates = startingCoordinates;
+    this.startXy = startXy;
     this.boring = false; // Will stop calculating more points if boring
     this.boringReason = null;
     this.calculateMorePoints(initialCount);
@@ -38,7 +38,7 @@ export default class AttractorPoints {
     if (this.boring) {
       return;
     }
-    let [x0, y0] = this.getCount() ? this._getLastPoint() : this.startingCoordinates;
+    let [x0, y0] = this.getCount() ? this._getLastPoint() : this.startXy;
     for (let i = 0; i < count; i++) {
       const [x1, y1] = calculateNextPoint(x0, y0, this.coefficients);
       this._addPoint(x1, y1);
