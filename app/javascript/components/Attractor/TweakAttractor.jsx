@@ -39,8 +39,8 @@ const TweakAttractor = ({cacheId, className, coefficients, startXy}) => {
             showEquation={false}
             startXy={tweakedStartXy}
             initialCount={30000}
-            width={300}
-            height={300}
+            width={250}
+            height={250}
           />
         </div>
       ))}
