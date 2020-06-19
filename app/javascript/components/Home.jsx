@@ -18,8 +18,8 @@ export default () => {
   return (
     <div className="primary-color d-flex flex-column align-items-center justify-content-center">
       <section className="d-flex w-100">
-        <div className="sidebar d-flex flex-column justify-content-start flex-grow-0 p-2">
-          <div className="d-flex flex-column justify-content-center border-bottom py-2">
+        <div className="sidebar d-flex flex-column justify-content-start flex-grow-0 p-2">{/* sidebar */}
+          <div className="d-flex flex-column justify-content-center border-bottom py-2">{/* page controls */}
             <button
               className="btn btn-secondary m-2"
               onClick={() => {
@@ -40,7 +40,7 @@ export default () => {
               Generate new attractor
             </button>
           </div>{/* /page controls */}
-          <div className="d-flex flex-column justify-content-center mb-4 py-2">
+          <div className="d-flex flex-column justify-content-center mb-4 py-2">{/* attractor controls */}
             <button
               className="btn btn-secondary m-2"
               onClick={() => {
