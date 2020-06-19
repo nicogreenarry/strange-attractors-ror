@@ -19,11 +19,9 @@ export default () => {
     <div className="primary-color d-flex flex-column align-items-center justify-content-center">
       <header className="container secondary-color text-center">
         <h1 className="display-4">Strange Attractors</h1>
-        <p className="lead">
-          Math is beautiful!
-        </p>
       </header>
       <section>
+        <hr className="my-2" />
         <div className="d-flex justify-content-center">
           <button
             className="btn btn-primary mx-2"
