@@ -68,6 +68,12 @@ const Attractor = ({className, coefficients, initialCount, showEquation, startXy
 
   return (
     <>
+      <canvas
+        ref={canvasEl}
+        width={width}
+        height={height}
+        className={className}
+      />
       {showEquation && (
         <Equation
           coefficients={coefficients}
@@ -75,12 +81,6 @@ const Attractor = ({className, coefficients, initialCount, showEquation, startXy
           className="mb-3"
         />
       )}
-      <canvas
-        ref={canvasEl}
-        width={width}
-        height={height}
-        className={className}
-      />
     </>
   );
 };
