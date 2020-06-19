@@ -24,7 +24,7 @@ export default () => {
         </p>
       </header>
       <section>
-        <div className="flex mb-4">
+        <div className="d-flex justify-content-center">
           <button
             className="btn btn-primary mx-2"
             onClick={() => {
@@ -35,7 +35,7 @@ export default () => {
             Next saved attractor
           </button>
           <button
-            className="btn btn-outline-primary mx-2"
+            className="btn btn-primary mx-2"
             onClick={() => {
               setTweakMode(false);
               const attractorPoints = findInterestingCoefficients();
@@ -44,8 +44,11 @@ export default () => {
           >
             Generate new attractor
           </button>
+        </div>
+        <hr className="my-2" />
+        <div className="d-flex justify-content-center mb-4">
           <button
-            className="btn btn-outline-primary mx-2"
+            className="btn btn-sm btn-outline-primary mx-2"
             onClick={() => {
               setTweakMode(true);
               setCacheId(prev => prev + 1);
