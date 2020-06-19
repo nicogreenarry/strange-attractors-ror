@@ -27,7 +27,7 @@ export default () => {
                 setCoefficientsIdx(prevIdx => (prevIdx + 1) % someGoodAttractors.length);
               }}
             >
-              Next saved attractor
+              Next featured attractor
             </button>
             <button
               className="btn btn-secondary m-2"
