@@ -1,4 +1,6 @@
 class AttractorsController < ApplicationController
+  before_action :logged_in_user, only: [:create]
+
   def random_featured
     query = if Rails.env.development? # dev uses sqlite
               <<~SQL
@@ -26,5 +28,32 @@ class AttractorsController < ApplicationController
     # TODO: Eventually it would be nice to record an error if attractor is nil, since it's likely a
     # bug (or it means we're using a dev/staging server without any featured sets in the db).
     render json: attractor&.slice('id', 'details')
+  end
+
+  def create
+    attractor = Attractor.new(
+      user_id: current_user.id,
+      details: attractor_params
+    )
+    saved = attractor.save
+    if saved
+      render json: {id: attractor.id}
+    else
+      render json: {error: "Failed to save attractor"}
+    end
+  end
+
+  private def attractor_params
+    params.require(:attractor).permit(coefficients: [], startXy: [])
+  end
+
+  # Before filters
+  # TODO: Should this be a session helper, instead of duplicating it here and in the users controller?
+  private def logged_in_user
+    unless logged_in?
+      store_location
+      flash[:danger] = "Please log in."
+      redirect_to login_url
+    end
   end
 end

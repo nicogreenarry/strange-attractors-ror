@@ -1,11 +1,18 @@
-import axios from 'axios';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import styled from 'styled-components';
 
 import findInterestingCoefficients from '../services/attractor/find_interesting_coefficients';
 
 import Attractor from './Attractor';
 import TweakAttractor from './Attractor/TweakAttractor';
+import {
+  ACTION_TYPES,
+  fetchRandomFeaturedAttractor,
+  historyReducer,
+  initialHistoryState,
+  KINDS,
+  saveAttractor
+} from './homeDucks';
 
 const PageContainer = styled.section`
   display: flex;
@@ -20,7 +27,7 @@ const Sidebar = styled.div`
   
   padding: 2px;
 `;
-const SidebarButtons = styled.div`
+const SidebarButtonsBase = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,8 +38,14 @@ const SidebarButtons = styled.div`
     border-bottom: none;
   }
 `;
-const PageControls = SidebarButtons;
-const AttractorControls = SidebarButtons;
+const SidebarButtonBase = styled.button` margin: 8px; `;
+const SidebarButton = ({className, children, ...props}) => (
+  <SidebarButtonBase className={`btn btn-secondary ${className || ''}`} {...props}>
+    {children}
+  </SidebarButtonBase>
+);
+const PageControls = SidebarButtonsBase;
+const AttractorControls = SidebarButtonsBase;
 const Main = styled.div`
   display: flex;
   flex-direction: column;
@@ -44,90 +57,81 @@ const Main = styled.div`
   flex-grow: 1;
 `;
 
-async function fetchRandomFeaturedAttractor() {
-  const res = await axios.get('/attractors/featured/random');
-  const attractor = res.data;
-  if (!attractor) {
-    return null;
-  }
-  attractor.details = JSON.parse(attractor.details);
-  return attractor;
-}
-
 export default () => {
-  const [attractorPointProps, setAttractorPointProps] = useState(null);
+  async function fetchFeaturedAttractorEffect() {
+    const attractorRequest = fetchRandomFeaturedAttractor();
+    historyDispatch({type: ACTION_TYPES.requestAttractor, fetchRequest: attractorRequest});
+    const attractor = await attractorRequest;
+    historyDispatch({
+      type: ACTION_TYPES.forward,
+      next: {kind: KINDS.attractor, attractor},
+      fetchRequest: attractorRequest,
+    });
+  }
   useEffect(() => {
-    async function fetchFeaturedAttractorEffect() {
-      const attractor = await fetchRandomFeaturedAttractor();
-      // TODO: Eventually it would be nice to display an error message in the UI
-      if (!attractor) {
-        return;
-      }
-      setAttractorPointProps(prev => {
-        // If attractorPointProps has gotten set before this call returns, then do nothing.
-        if (prev) {
-          return;
-        }
-        return attractor.details;
-      });
-    }
     fetchFeaturedAttractorEffect();
-  }, [])
+  }, []);
 
-  const [tweakMode, setTweakMode] = useState(false);
-  const [cacheId, setCacheId] = useState(0); // Ultimately this will be based on something like the history length
+  const [historyState, historyDispatch] = useReducer(historyReducer, initialHistoryState);
+
+  const tweakMode = (historyState.current || {}).kind === KINDS.tweakedAttractor;
+
+  const canSave = historyState.current
+    && !tweakMode
+    && !historyState.saveRequest // Can't save if a save request is in flight
+    && !historyState.current.attractor.id // Can't save if the attractor has already been saved
 
   return (
     <PageContainer>
       <Sidebar>
         <PageControls>
-          <button
-            className="btn btn-secondary m-2"
-            onClick={async () => {
-              const attractorBeforeFetch = attractorPointProps;
-              const attractor = await fetchRandomFeaturedAttractor();
-              setTweakMode(false);
-              setAttractorPointProps(prev => {
-                // If attractorPointProps has been changed before this call returns, then do nothing.
-                if (prev !== attractorBeforeFetch) {
-                  return prev;
-                }
-                return attractor.details;
+          <SidebarButton onClick={fetchFeaturedAttractorEffect} disabled={historyState.fetchRequest}>
+            Random featured attractor
+          </SidebarButton>
+          <SidebarButton
+            onClick={() => {
+              const attractorPoints = findInterestingCoefficients();
+              historyDispatch({
+                type: ACTION_TYPES.forward,
+                // An AttractorPoints instance can be used as a HistoricalAttractor, since coefficients and startXy are accessible.
+                next: {kind: KINDS.attractor, attractor: attractorPoints},
               });
             }}
           >
-            Random featured attractor
-          </button>
-          <button
-            className="btn btn-secondary m-2"
-            onClick={() => {
-              setTweakMode(false);
-              const attractorPoints = findInterestingCoefficients();
-              setAttractorPointProps(attractorPoints);
-            }}
-          >
             Generate new attractor
-          </button>
+          </SidebarButton>
         </PageControls>
         <AttractorControls>
-          <button
-            className="btn btn-secondary m-2"
+          <SidebarButton
             onClick={() => {
-              setTweakMode(true);
-              setCacheId(prev => prev + 1);
+              historyDispatch({
+                type: ACTION_TYPES.forward,
+                next: {kind: KINDS.tweakedAttractor},
+              });
             }}
           >
             Tweak this attractor
-          </button>
+          </SidebarButton>
+          <SidebarButton
+            onClick={async () => {
+              const saveRequest = saveAttractor(historyState.current.attractor);
+              historyDispatch({type: ACTION_TYPES.requestSaveAttractor, saveRequest});
+              const savedId = await saveRequest;
+              historyDispatch({type: ACTION_TYPES.savedAttractor, savedId, saveRequest});
+            }}
+            disabled={!canSave}
+          >
+            Save this attractor
+          </SidebarButton>
         </AttractorControls>
       </Sidebar>
       <Main>
-        {attractorPointProps && tweakMode && (
-          <TweakAttractor cacheId={cacheId} {...attractorPointProps} className="mb-3" />
+        {historyState.current && tweakMode && (
+          <TweakAttractor cacheId={historyState.history.length} {...historyState.current.attractor} className="mb-3" />
         )}
-        {attractorPointProps && !tweakMode && (
+        {historyState.current && !tweakMode && (
           <Attractor
-            {...attractorPointProps}
+            {...historyState.current.attractor}
             showEquation={true}
             className="mb-3"
             initialCount={45000}

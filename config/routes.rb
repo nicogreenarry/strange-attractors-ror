@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   # Attractors
   get '/attractors/featured/random', to: 'attractors#random_featured'
+  post '/attractors', to: 'attractors#create'
 
   # Static pages
   get '/about', to: 'static_pages#about'
