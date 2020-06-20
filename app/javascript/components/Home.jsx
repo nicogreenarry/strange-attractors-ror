@@ -20,7 +20,7 @@ const Sidebar = styled.div`
   
   padding: 2px;
 `;
-const SidebarButtons = styled.div`
+const SidebarButtonsBase = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,8 +31,14 @@ const SidebarButtons = styled.div`
     border-bottom: none;
   }
 `;
-const PageControls = SidebarButtons;
-const AttractorControls = SidebarButtons;
+const SidebarButtonBase = styled.button` margin: 8px; `;
+const SidebarButton = ({className, children, ...props}) => (
+  <SidebarButtonBase className={`btn btn-secondary ${className || ''}`} {...props}>
+    {children}
+  </SidebarButtonBase>
+);
+const PageControls = SidebarButtonsBase;
+const AttractorControls = SidebarButtonsBase;
 const Main = styled.div`
   display: flex;
   flex-direction: column;
@@ -81,8 +87,7 @@ export default () => {
     <PageContainer>
       <Sidebar>
         <PageControls>
-          <button
-            className="btn btn-secondary m-2"
+          <SidebarButton
             onClick={async () => {
               const attractorBeforeFetch = attractorPointProps;
               const attractor = await fetchRandomFeaturedAttractor();
@@ -97,9 +102,8 @@ export default () => {
             }}
           >
             Random featured attractor
-          </button>
-          <button
-            className="btn btn-secondary m-2"
+          </SidebarButton>
+          <SidebarButton
             onClick={() => {
               setTweakMode(false);
               const attractorPoints = findInterestingCoefficients();
@@ -107,18 +111,17 @@ export default () => {
             }}
           >
             Generate new attractor
-          </button>
+          </SidebarButton>
         </PageControls>
         <AttractorControls>
-          <button
-            className="btn btn-secondary m-2"
+          <SidebarButton
             onClick={() => {
               setTweakMode(true);
               setCacheId(prev => prev + 1);
             }}
           >
             Tweak this attractor
-          </button>
+          </SidebarButton>
         </AttractorControls>
       </Sidebar>
       <Main>
