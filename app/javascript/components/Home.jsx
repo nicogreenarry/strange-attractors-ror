@@ -5,7 +5,14 @@ import findInterestingCoefficients from '../services/attractor/find_interesting_
 
 import Attractor from './Attractor';
 import TweakAttractor from './Attractor/TweakAttractor';
-import { ACTION_TYPES, KINDS, fetchRandomFeaturedAttractor, initialHistoryState, historyReducer } from './homeDucks';
+import {
+  ACTION_TYPES,
+  fetchRandomFeaturedAttractor,
+  historyReducer,
+  initialHistoryState,
+  KINDS,
+  saveAttractor
+} from './homeDucks';
 
 const PageContainer = styled.section`
   display: flex;
@@ -53,7 +60,7 @@ const Main = styled.div`
 export default () => {
   async function fetchFeaturedAttractorEffect() {
     const attractorRequest = fetchRandomFeaturedAttractor();
-    historyDispatch({type: ACTION_TYPES.requestingAttractor, fetchRequest: attractorRequest});
+    historyDispatch({type: ACTION_TYPES.requestAttractor, fetchRequest: attractorRequest});
     const attractor = await attractorRequest;
     historyDispatch({
       type: ACTION_TYPES.forward,
@@ -68,6 +75,11 @@ export default () => {
   const [historyState, historyDispatch] = useReducer(historyReducer, initialHistoryState);
 
   const tweakMode = (historyState.current || {}).kind === KINDS.tweakedAttractor;
+
+  const canSave = historyState.current
+    && !tweakMode
+    && !historyState.saveRequest // Can't save if a save request is in flight
+    && !historyState.current.attractor.id // Can't save if the attractor has already been saved
 
   return (
     <PageContainer>
@@ -99,6 +111,17 @@ export default () => {
             }}
           >
             Tweak this attractor
+          </SidebarButton>
+          <SidebarButton
+            onClick={async () => {
+              const saveRequest = saveAttractor(historyState.current.attractor);
+              historyDispatch({type: ACTION_TYPES.requestSaveAttractor, saveRequest});
+              const savedId = await saveRequest;
+              historyDispatch({type: ACTION_TYPES.savedAttractor, savedId, saveRequest});
+            }}
+            disabled={!canSave}
+          >
+            Save this attractor
           </SidebarButton>
         </AttractorControls>
       </Sidebar>

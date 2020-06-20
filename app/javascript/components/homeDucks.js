@@ -4,7 +4,9 @@ import ax from 'packs/axios';
 export const ACTION_TYPES = {
   back: 'back',
   forward: 'forward',
-  requestingAttractor: 'requesting_attractor',
+  requestAttractor: 'request_attractor',
+  requestSaveAttractor: 'request_save_attractor',
+  savedAttractor: 'saved_attractor',
 };
 export const KINDS = {
   attractor: 'attractor',
@@ -25,6 +27,11 @@ export async function fetchRandomFeaturedAttractor() {
   };
 }
 
+export async function saveAttractor({coefficients, startXy}) {
+  const res = await ax.post('/attractors', { attractor: {coefficients, startXy}});
+  return res.data.id;
+}
+
 /* Reducer */
 
 /*
@@ -34,15 +41,22 @@ export async function fetchRandomFeaturedAttractor() {
     next: HistoryItem;
     // `fetchRequest` should be supplied if the `next` came from a network request. That allows the
     // reducer to disregard it if another history item was added after this one was requested.
-    fetchRequest?: Promise<etc>;
+    fetchRequest?: Promise<any>;
   } | {
     // Represents navigating back to the previous history item
     type: 'back';
   } | {
     // Stores a pending request for an attractor
-    type: 'requesting_attractor';
-    fetchRequest: Promise<etc>;
-  }
+    type: 'request_attractor';
+    fetchRequest: Promise<any>;
+  } | {
+    type: 'request_save_attractor';
+    saveRequest: Promise<any>;
+  } | {
+    type: 'saved_attractor';
+    savedId: number; // id of the saved attractor
+    saveRequest: Promise<any>;
+  };
 
   interface HistoricalAttractor {
     coefficients: number[]; // 12 coefficients
@@ -78,7 +92,11 @@ export const initialHistoryState = {
   // When there's a network request for an attractor, the promise will be stored here. When there's
   // an outstanding request that should be ignored (e.g. because some other button was pressed in
   // the meantime), this should be set to null.
-  fetchRequest: null
+  fetchRequest: null,
+  // When there's a network request to save an attractor, the promise will be stored here. When there's
+  // an outstanding request that should be ignored (e.g. because some other button was pressed in
+  // the meantime), this should be set to null.
+  saveRequest: null,
 };
 export function historyReducer(state, action) {
   switch (action.type) {
@@ -99,16 +117,37 @@ export function historyReducer(state, action) {
         history: [...state.history, state.current],
         current: action.next,
         fetchRequest: null,
+        saveRequest: null,
       };
-    case ACTION_TYPES.back:
+    case ACTION_TYPES.back: {
       const current = state.history.pop();
       return {
         history: [...state.history],
         current,
         fetchRequest: null,
+        saveRequest: null,
       };
-    case ACTION_TYPES.requestingAttractor:
+    }
+    case ACTION_TYPES.requestAttractor:
       return {...state, fetchRequest: action.fetchRequest};
+    case ACTION_TYPES.requestSaveAttractor:
+      return {...state, saveRequest: action.saveRequest};
+    case ACTION_TYPES.savedAttractor: {
+      if (action.saveRequest !== state.saveRequest) {
+        return state;
+      }
+      const current = (state.current.kind === KINDS.attractor && state.saveRequest === action.saveRequest)
+        ? {
+            ...state.current,
+            attractor: {...state.current.attractor, id: action.savedId}
+          }
+        : state.current; // TODO: Support saving id of tweaked variant
+      return {
+        ...state,
+        current,
+        saveRequest: null,
+      };
+    }
     default:
       throw Error(`Unsupported action ${action.type} dispatched to historyReducer`);
   }
