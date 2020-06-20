@@ -79,7 +79,7 @@ export default () => {
   const canSave = historyState.current
     && !tweakMode
     && !historyState.saveRequest // Can't save if a save request is in flight
-    && !historyState.current.attractor.id // Can't save if the attractor has already been saved
+    && !historyState.current.attractor.savedByMe // Can't save if I've already saved the attractor
 
   return (
     <PageContainer>

@@ -23,13 +23,23 @@ export async function fetchRandomFeaturedAttractor() {
   attractor.details = JSON.parse(attractor.details);
   return {
     id: attractor.id,
+    savedByMe: attractor.savedByMe,
     ...attractor.details,
   };
 }
 
 export async function saveAttractor({coefficients, startXy}) {
-  const res = await ax.post('/attractors', { attractor: {coefficients, startXy}});
-  return res.data.id;
+  try {
+    const res = await ax.post('/attractors', {attractor: {coefficients, startXy}});
+    return res.data.id;
+  } catch (e) {
+    // TODO: Should this behavior be saved somewhere like in packs/axios.js so it's shared?
+    if (e.response.status === 403 && e.response.data.location) {
+      window.location = e.response.data.location;
+      return;
+    }
+    throw e;
+  }
 }
 
 /* Reducer */
@@ -62,6 +72,7 @@ export async function saveAttractor({coefficients, startXy}) {
     coefficients: number[]; // 12 coefficients
     startXy: [number, number];
     id?: number; // Include this if it's a persisted attractor
+    savedByMe?: boolean;
   }
   type HistoryItem = {
     kind: typeof KINDS.attractor;
@@ -139,7 +150,7 @@ export function historyReducer(state, action) {
       const current = (state.current.kind === KINDS.attractor && state.saveRequest === action.saveRequest)
         ? {
             ...state.current,
-            attractor: {...state.current.attractor, id: action.savedId}
+            attractor: {...state.current.attractor, id: action.savedId, savedByMe: true}
           }
         : state.current; // TODO: Support saving id of tweaked variant
       return {
