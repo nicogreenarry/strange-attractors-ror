@@ -56,7 +56,7 @@ class AttractorsController < ApplicationController
     unless logged_in?
       store_location
       flash[:danger] = "Please log in."
-      redirect_to login_url
+      request.xhr? ? render(json: {location: login_path}, status: 403) : redirect_to(login_url)
     end
   end
 end

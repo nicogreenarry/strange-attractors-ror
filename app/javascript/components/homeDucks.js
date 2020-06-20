@@ -29,8 +29,17 @@ export async function fetchRandomFeaturedAttractor() {
 }
 
 export async function saveAttractor({coefficients, startXy}) {
-  const res = await ax.post('/attractors', { attractor: {coefficients, startXy}});
-  return res.data.id;
+  try {
+    const res = await ax.post('/attractors', {attractor: {coefficients, startXy}});
+    return res.data.id;
+  } catch (e) {
+    // TODO: Should this behavior be saved somewhere like in packs/axios.js so it's shared?
+    if (e.response.status === 403 && e.response.data.location) {
+      window.location = e.response.data.location;
+      return;
+    }
+    throw e;
+  }
 }
 
 /* Reducer */
