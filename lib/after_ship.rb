@@ -3,7 +3,7 @@
 #
 # If you want to create a long-lasting method, you should probably add it to another class.
 module AfterShip
-  def self.attractors_to_save
+  def AfterShip.attractors_to_save
     [
       {
         coefficients: [-1.2,0,0.7,0,0.1,0.4,0.4,1.1,0.8,1.2,-0.6,-1.2],
@@ -212,10 +212,10 @@ module AfterShip
   # So far I've persisted the following attractor ids:
   # - Dev: 0..49
   # - Prod: None so far
-  def self.save_nico_attractors(ids: nil)
-    nico = User.find(1)
+  def AfterShip.save_nico_attractors(nico_id:, attractor_ids: nil)
+    nico = User.find(nico_id)
     attractors = self.attractors_to_save
-    attractors = Array.wrap(attractors[ids]) if ids
+    attractors = Array.wrap(attractors[attractor_ids]) if attractor_ids
     attractors.each do |a|
       nico.attractors.create!(details: a)
     end

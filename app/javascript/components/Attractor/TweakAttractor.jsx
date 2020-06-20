@@ -26,9 +26,7 @@ const TweakAttractor = ({cacheId, className, coefficients, startXy}) => {
     return tweakNumbers({coefficients, n: 9, sensitivity: .02, startXy});
   }
   const [tweakedResults, setTweakedResults] = useState(generateTweakedResults);
-  useEffect(() => {
-    setTweakedResults(generateTweakedResults());
-  }, [cacheId, ...coefficients, ...startXy]);
+  useEffect(() => setTweakedResults(generateTweakedResults()), [cacheId, ...coefficients, ...startXy]);
 
   return (
     <Grid className={className}>
