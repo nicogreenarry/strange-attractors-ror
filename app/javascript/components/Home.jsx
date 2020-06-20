@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
 import findInterestingCoefficients from '../services/attractor/find_interesting_coefficients';
-import {someGoodAttractors} from '../services/attractor/saved_sets';
 
 import Attractor from './Attractor';
 import TweakAttractor from './Attractor/TweakAttractor';
