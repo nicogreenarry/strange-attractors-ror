@@ -23,6 +23,8 @@ class AttractorsController < ApplicationController
 
     attractor = ActiveRecord::Base.connection.execute(query).first
 
-    render json: attractor.slice('id', 'details')
+    # TODO: Eventually it would be nice to record an error if attractor is nil, since it's likely a
+    # bug (or it means we're using a dev/staging server without any featured sets in the db).
+    render json: attractor&.slice('id', 'details')
   end
 end

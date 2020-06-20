@@ -47,6 +47,9 @@ const Main = styled.div`
 async function fetchRandomFeaturedAttractor() {
   const res = await axios.get('/attractors/featured/random');
   const attractor = res.data;
+  if (!attractor) {
+    return null;
+  }
   attractor.details = JSON.parse(attractor.details);
   return attractor;
 }
@@ -56,6 +59,10 @@ export default () => {
   useEffect(() => {
     async function fetchFeaturedAttractorEffect() {
       const attractor = await fetchRandomFeaturedAttractor();
+      // TODO: Eventually it would be nice to display an error message in the UI
+      if (!attractor) {
+        return;
+      }
       setAttractorPointProps(prev => {
         // If attractorPointProps has gotten set before this call returns, then do nothing.
         if (prev) {
