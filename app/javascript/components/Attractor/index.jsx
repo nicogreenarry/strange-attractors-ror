@@ -68,12 +68,14 @@ const Attractor = ({className, coefficients, initialCount, showEquation, startXy
 
   return (
     <>
-      <canvas
-        ref={canvasEl}
-        width={width}
-        height={height}
-        className={className}
-      />
+      <div class="d-flex justify-content-center">
+        <canvas
+          ref={canvasEl}
+          width={width}
+          height={height}
+          className={className}
+        />
+      </div>
       {showEquation && (
         <Equation
           coefficients={coefficients}
