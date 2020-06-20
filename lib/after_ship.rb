@@ -3,7 +3,7 @@
 #
 # If you want to create a long-lasting method, you should probably add it to another class.
 module AfterShip
-  def self.attractors_to_save
+  def AfterShip.attractors_to_save
     [
       {
         coefficients: [-1.2,0,0.7,0,0.1,0.4,0.4,1.1,0.8,1.2,-0.6,-1.2],
