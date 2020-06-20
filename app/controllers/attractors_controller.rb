@@ -27,7 +27,9 @@ class AttractorsController < ApplicationController
 
     # TODO: Eventually it would be nice to record an error if attractor is nil, since it's likely a
     # bug (or it means we're using a dev/staging server without any featured sets in the db).
-    render json: attractor&.slice('id', 'details')
+    response = attractor&.slice('id', 'details')
+    response[:savedByMe] = attractor["user_id"] == current_user&.id
+    render json: response
   end
 
   def create
@@ -39,6 +41,7 @@ class AttractorsController < ApplicationController
     if saved
       render json: {id: attractor.id}
     else
+      # TODO handle this on the frontend
       render json: {error: "Failed to save attractor"}
     end
   end
