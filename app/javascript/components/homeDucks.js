@@ -32,16 +32,16 @@ export async function fetchRandomFeaturedAttractor() {
     // Represents navigating forward
     type: 'forward';
     next: HistoryItem;
-    // `request` should be supplied if the `next` came from a network request. That allows the
+    // `fetchRequest` should be supplied if the `next` came from a network request. That allows the
     // reducer to disregard it if another history item was added after this one was requested.
-    request?: Promise<etc>;
+    fetchRequest?: Promise<etc>;
   } | {
     // Represents navigating back to the previous history item
     type: 'back';
   } | {
     // Stores a pending request for an attractor
     type: 'requesting_attractor';
-    request: Promise<etc>;
+    fetchRequest: Promise<etc>;
   }
 
   interface HistoricalAttractor {
@@ -78,13 +78,13 @@ export const initialHistoryState = {
   // When there's a network request for an attractor, the promise will be stored here. When there's
   // an outstanding request that should be ignored (e.g. because some other button was pressed in
   // the meantime), this should be set to null.
-  request: null
+  fetchRequest: null
 };
 export function historyReducer(state, action) {
   switch (action.type) {
     case ACTION_TYPES.forward:
-      // See explanation in documentation on the `request` action prop.
-      if (action.request && action.request !== state.request) {
+      // See explanation in documentation on the `fetchRequest` action prop.
+      if (action.fetchRequest && action.fetchRequest !== state.fetchRequest) {
         return state;
       }
       // If the next history item is a tweaked_attractor, and no attractor is supplied, that
@@ -98,17 +98,17 @@ export function historyReducer(state, action) {
       return {
         history: [...state.history, state.current],
         current: action.next,
-        request: null,
+        fetchRequest: null,
       };
     case ACTION_TYPES.back:
       const current = state.history.pop();
       return {
         history: [...state.history],
         current,
-        request: null,
+        fetchRequest: null,
       };
     case ACTION_TYPES.requestingAttractor:
-      return {...state, request: action.request};
+      return {...state, fetchRequest: action.fetchRequest};
     default:
       throw Error(`Unsupported action ${action.type} dispatched to historyReducer`);
   }

@@ -53,12 +53,12 @@ const Main = styled.div`
 export default () => {
   async function fetchFeaturedAttractorEffect() {
     const attractorRequest = fetchRandomFeaturedAttractor();
-    historyDispatch({type: ACTION_TYPES.requestingAttractor, request: attractorRequest});
+    historyDispatch({type: ACTION_TYPES.requestingAttractor, fetchRequest: attractorRequest});
     const attractor = await attractorRequest;
     historyDispatch({
       type: ACTION_TYPES.forward,
       next: {kind: KINDS.attractor, attractor},
-      request: attractorRequest,
+      fetchRequest: attractorRequest,
     });
   }
   useEffect(() => {
@@ -73,7 +73,7 @@ export default () => {
     <PageContainer>
       <Sidebar>
         <PageControls>
-          <SidebarButton onClick={fetchFeaturedAttractorEffect} disabled={historyState.request}>
+          <SidebarButton onClick={fetchFeaturedAttractorEffect} disabled={historyState.fetchRequest}>
             Random featured attractor
           </SidebarButton>
           <SidebarButton
