@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
@@ -44,12 +45,28 @@ const Main = styled.div`
   flex-grow: 1;
 `;
 
+async function fetchRandomFeaturedAttractor() {
+  const res = await axios.get('/attractors/featured/random');
+  const attractor = res.data;
+  attractor.details = JSON.parse(attractor.details);
+  return attractor;
+}
+
 export default () => {
-  const [coefficientsIdx, setCoefficientsIdx] = useState(0);
-  const [attractorPointProps, setAttractorPointProps] = useState(someGoodAttractors[coefficientsIdx]);
+  const [attractorPointProps, setAttractorPointProps] = useState(null);
   useEffect(() => {
-    setAttractorPointProps(someGoodAttractors[coefficientsIdx]);
-  }, [coefficientsIdx]);
+    async function fetchFeaturedAttractorEffect() {
+      const attractor = await fetchRandomFeaturedAttractor();
+      setAttractorPointProps(prev => {
+        // If attractorPointProps has gotten set before this call returns, then do nothing.
+        if (prev) {
+          return;
+        }
+        return attractor.details;
+      });
+    }
+    fetchFeaturedAttractorEffect();
+  }, [])
 
   const [tweakMode, setTweakMode] = useState(false);
   const [cacheId, setCacheId] = useState(0); // Ultimately this will be based on something like the history length
@@ -60,12 +77,20 @@ export default () => {
         <PageControls>
           <button
             className="btn btn-secondary m-2"
-            onClick={() => {
+            onClick={async () => {
+              const attractorBeforeFetch = attractorPointProps;
+              const attractor = await fetchRandomFeaturedAttractor();
               setTweakMode(false);
-              setCoefficientsIdx(prevIdx => (prevIdx + 1) % someGoodAttractors.length);
+              setAttractorPointProps(prev => {
+                // If attractorPointProps has been changed before this call returns, then do nothing.
+                if (prev !== attractorBeforeFetch) {
+                  return prev;
+                }
+                return attractor.details;
+              });
             }}
           >
-            Next featured attractor
+            Random featured attractor
           </button>
           <button
             className="btn btn-secondary m-2"
@@ -91,21 +116,19 @@ export default () => {
         </AttractorControls>
       </Sidebar>
       <Main>
-        {
-          tweakMode
-            ? (
-              <TweakAttractor cacheId={cacheId} {...attractorPointProps} className="mb-3" />
-            ) : (
-              <Attractor
-                {...attractorPointProps}
-                showEquation={true}
-                className="mb-3"
-                initialCount={45000}
-                width={500}
-                height={500}
-              />
-            )
-        }
+        {attractorPointProps && tweakMode && (
+          <TweakAttractor cacheId={cacheId} {...attractorPointProps} className="mb-3" />
+        )}
+        {attractorPointProps && !tweakMode && (
+          <Attractor
+            {...attractorPointProps}
+            showEquation={true}
+            className="mb-3"
+            initialCount={45000}
+            width={500}
+            height={500}
+          />
+        )}
       </Main>
     </PageContainer>
   );
