@@ -1,4 +1,4 @@
-import axios from 'axios';
+import ax from 'packs/axios';
 
 /* Constants */
 export const ACTION_TYPES = {
@@ -13,7 +13,7 @@ export const KINDS = {
 
 /* Actions */
 export async function fetchRandomFeaturedAttractor() {
-  const res = await axios.get('/attractors/featured/random');
+  const res = await ax.get('/attractors/featured/random');
   const attractor = res.data;
   if (!attractor) {
     return null;
