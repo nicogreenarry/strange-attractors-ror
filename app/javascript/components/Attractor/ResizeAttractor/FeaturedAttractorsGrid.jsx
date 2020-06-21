@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import {fetchFeaturedAttractors} from './ducks';
 import Attractor from '../index';
 
+const PAGE_RANGE_DISPLAYED = 5;
+const MARGIN_PAGES_DISPLAYED = 2;
+
 function PaginateWithClassNameWrapper({className, containerClassName, ...props}) {
   return (
     <PaginateUnstyled
@@ -22,6 +25,7 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-gap: 1em;
+  margin-bottom: 8px;
 `;
 
 const DISPLAY_PER_PAGE = 12;
@@ -29,12 +33,12 @@ const DISPLAY_PER_PAGE = 12;
 function FeaturedAttractorsGrid({count}) {
   const [attractors, setAttractors] = React.useState([]);
   useEffect(() => {
-    fetchFeaturedAttractors(0).then(setAttractors);
+    fetchFeaturedAttractors(1).then(setAttractors);
   }, []);
 
   function handlePageChange({ selected, ...rest }) {
-    console.log(`[FeaturedAttractorsGrid.jsx L17] rest:`, rest);
-    fetchFeaturedAttractors(selected).then(setAttractors);
+    // react-paginate page numbers are 0-indexed, unlike rails' pagination
+    fetchFeaturedAttractors(selected + 1).then(setAttractors);
   }
 
   return (
@@ -47,6 +51,7 @@ function FeaturedAttractorsGrid({count}) {
             startXy={attractor.startXy}
             width={200}
             height={200}
+            key={attractor.id}
           />
         ))}
       </Grid>
@@ -56,10 +61,12 @@ function FeaturedAttractorsGrid({count}) {
         containerClassName="pagination btn-group"
         role="group"
         pageClassName="btn btn-outline-secondary"
-        previousClassName="btn btn-outline-secondary"
-        nextClassName="btn btn-outline-secondary"
-        pageLinkClassName="pagination__link"
+        previousClassName="btn btn-outline-secondary stretched-link"
+        nextClassName="btn btn-outline-secondary stretched-link"
+        pageLinkClassName="pagination__link stretched-link"
         activeClassName="pagination__active btn-secondary"
+        marginPagesDisplayed={MARGIN_PAGES_DISPLAYED}
+        pageRangeDisplayed={PAGE_RANGE_DISPLAYED}
       />
     </>
   )
