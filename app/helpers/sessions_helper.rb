@@ -28,6 +28,10 @@ module SessionsHelper
     !!current_user
   end
 
+  def admin?
+    current_user&.admin?
+  end
+
   def log_out
     forget(current_user)
     reset_session

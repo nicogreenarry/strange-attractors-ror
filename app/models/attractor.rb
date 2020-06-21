@@ -7,6 +7,8 @@ class Attractor < ApplicationRecord
 
   default_scope -> { order(created_at: :desc) }
 
+  scope :featured, -> { where.not(featured_at: nil) }
+
   private def details_have_valid_parameters
     if details&.[]("coefficients")&.length != 12
       errors.add(:details, "must have 12 coefficients")

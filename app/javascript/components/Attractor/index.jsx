@@ -26,7 +26,16 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height}) {
     height: integer
   }
  */
-const Attractor = ({className, coefficients, initialCount, showEquation, startXy, width, height}) => {
+const Attractor = ({
+  className,
+  coefficients,
+  handleClickAttractor = () => {},
+  height,
+  initialCount,
+  showEquation,
+  startXy,
+  width,
+}) => {
   const canvasEl = useRef(null);
   const attractorPoints = useMemo(() => {
     return new AttractorPoints({
@@ -34,7 +43,7 @@ const Attractor = ({className, coefficients, initialCount, showEquation, startXy
       initialCount,
       startXy,
     });
-  }, [...coefficients]);
+  }, [...coefficients, ...startXy, initialCount]);
 
   useEffect(() => {
     if (!canvasEl.current) {
@@ -43,7 +52,6 @@ const Attractor = ({className, coefficients, initialCount, showEquation, startXy
 
     const ctx = canvasEl.current.getContext('2d');
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = 'green';
 
     // TODO: Pull a lot of this logic out into services
     const points = attractorPoints.getPointsForRendering();
@@ -64,11 +72,11 @@ const Attractor = ({className, coefficients, initialCount, showEquation, startXy
       attractorImageData.data[alphaIdx] = COLOR[3];
     });
     ctx.putImageData(attractorImageData, 0, 0);
-  }, [canvasEl.current, coefficients]);
+  }, [canvasEl.current, ...coefficients, ...startXy, initialCount, width, height]);
 
   return (
     <>
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center" onClick={() => handleClickAttractor({coefficients, startXy})}>
         <canvas
           ref={canvasEl}
           width={width}
