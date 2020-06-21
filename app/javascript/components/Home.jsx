@@ -12,7 +12,7 @@ import {
   initialHistoryState,
   KINDS,
   saveAttractor
-} from './homeDucks';
+} from './home_ducks';
 
 const PageContainer = styled.section`
   display: flex;
