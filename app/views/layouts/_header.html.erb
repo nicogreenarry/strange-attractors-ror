@@ -17,11 +17,22 @@
           <li class="nav-item">
             <%= link_to "Users", users_path, class: "nav-link" %>
           </li>
+          <% if admin? %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Admin
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarAdminDropdown">
+                <%= link_to "Resize attractor", resize_attractor_path, class: "dropdown-item" %>
+              </div>
+            </li>
+          <% end %>
+
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarAccountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Account
             </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarAccountDropdown">
               <%= link_to "Profile", current_user, class: "dropdown-item" %>
               <%= link_to "Settings", edit_user_path(current_user), class: "dropdown-item" %>
               <div class="dropdown-divider"></div>

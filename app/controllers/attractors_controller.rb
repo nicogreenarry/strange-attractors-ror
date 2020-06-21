@@ -1,5 +1,6 @@
 class AttractorsController < ApplicationController
-  before_action :logged_in_user, only: [:create]
+  before_action :logged_in_user, only: [:create, :resize]
+  before_action :admin_user, only: [:resize]
 
   def random_featured
     query = if Rails.env.development? # dev uses sqlite
@@ -46,6 +47,10 @@ class AttractorsController < ApplicationController
     end
   end
 
+  # Admin-only routes
+  def resize
+  end
+
   private def attractor_params
     params.require(:attractor).permit(coefficients: [], startXy: [])
   end
@@ -58,5 +63,9 @@ class AttractorsController < ApplicationController
       flash[:danger] = "Please log in."
       request.xhr? ? render(json: {location: login_path}, status: 403) : redirect_to(login_url)
     end
+  end
+
+  private def admin_user
+    redirect_to(root_url) unless admin?
   end
 end

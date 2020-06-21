@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   # Attractors
   get '/attractors/featured/random', to: 'attractors#random_featured'
   post '/attractors', to: 'attractors#create'
+  # Admin-only routes
+  get '/attractors/resize', to: 'attractors#resize', as: 'resize_attractor'
 
   # Static pages
   get '/about', to: 'static_pages#about'
