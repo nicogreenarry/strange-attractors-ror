@@ -16,6 +16,8 @@ module StrangeAttractorsRor
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
 
+    config.exceptions_app = self.routes
+
     console do
       require "./lib/after_ship"
     end

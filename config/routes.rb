@@ -19,4 +19,9 @@ Rails.application.routes.draw do
   # Static pages
   get '/about', to: 'static_pages#about'
   get '/what-are-strange-attractors', to: 'static_pages#what_are_strange_attractors'
+  
+  # Error handling
+  get "/404", to: "errors#not_found", :via => :all
+  get "/422", to: "errors#unacceptable", :via => :all
+  get "/500", to: "errors#internal_error", :via => :all
 end
