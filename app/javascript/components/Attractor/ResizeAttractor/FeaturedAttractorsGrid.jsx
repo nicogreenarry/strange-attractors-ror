@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PaginateUnstyled from 'react-paginate';
 import styled from 'styled-components';
 import {fetchFeaturedAttractors} from './ducks';
@@ -30,8 +30,8 @@ const Grid = styled.div`
 
 const DISPLAY_PER_PAGE = 12;
 
-function FeaturedAttractorsGrid({count}) {
-  const [attractors, setAttractors] = React.useState([]);
+function FeaturedAttractorsGrid({count, handleSelectAttractor}) {
+  const [attractors, setAttractors] = useState([]);
   useEffect(() => {
     fetchFeaturedAttractors(1).then(setAttractors);
   }, []);
@@ -51,6 +51,7 @@ function FeaturedAttractorsGrid({count}) {
             startXy={attractor.startXy}
             width={200}
             height={200}
+            handleClickAttractor={handleSelectAttractor}
             key={attractor.id}
           />
         ))}
