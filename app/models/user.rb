@@ -17,6 +17,14 @@ class User < ApplicationRecord
   has_many :attractors, dependent: :destroy
 
   def self.digest(str)
+    # The password digest is created using bcrypt (via has_secure_password), so we’ll need to use
+    # the same method for creating digests manually. The secure password source code uses:
+    # `BCrypt::Password.create(string, cost: cost)` where string is the string to be hashed and cost
+    # is the cost parameter that determines the computational cost to calculate the hash. Using a
+    # high cost makes it computationally intractable to use the hash to determine the original
+    # password, which is an important security precaution in a production environment, but in tests
+    # we want the digest method to be as fast as possible. The secure password source code has a
+    # line for this as well, which we'll use (below).
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(str, cost: cost)
   end
