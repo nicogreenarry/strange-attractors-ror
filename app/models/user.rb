@@ -33,9 +33,10 @@ class User < ApplicationRecord
     SecureRandom.urlsafe_base64
   end
 
-  def authenticated?(password)
-    return false if remember_digest.nil?
-    BCrypt::Password.new(remember_digest).is_password?(password)
+  def authenticated?(attribute, token)
+    digest = send("#{attribute}_digest")
+    return false unless digest.present?
+    BCrypt::Password.new(digest).is_password?(token)
   end
 
   def remember
