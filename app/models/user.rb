@@ -48,4 +48,16 @@ class User < ApplicationRecord
   def forget
     update_attribute(:remember_digest, nil)
   end
+
+  def create_password_reset_digest
+    self.password_reset_token = User.new_token
+    update_columns(
+      password_reset_digest: User.digest(password_reset_token),
+      password_reset_sent_at: Time.zone.now,
+    )
+  end
+
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
 end
