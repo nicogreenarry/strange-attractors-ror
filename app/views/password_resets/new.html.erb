@@ -1,2 +1,14 @@
-<h1>PasswordResets#new</h1>
-<p>Find me in app/views/password_resets/new.html.erb</p>
+<% provide(:title, 'Forgot password') %>
+<div class="primary-color d-flex flex-column justify-content-center pt-4">
+  <header class="container secondary-color text-center">
+    <h1 class="display-4 mb-4">Forgot password</h1>
+  </header>
+  <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
+    <%= form_with(url: password_resets_path, scope: :password_reset, local: true) do |f| %>
+      <%= f.label :email %>
+      <%= f.email_field :email, class: 'form-control' %>
+
+      <%= f.submit "Submit", class: "btn btn-primary mt-3" %>
+    <% end %>
+  </section>
+</div>
