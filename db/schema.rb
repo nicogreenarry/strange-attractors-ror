@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_18_045126) do
+ActiveRecord::Schema.define(version: 2020_06_27_224300) do
 
   create_table "attractors", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 2020_06_18_045126) do
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false, null: false
+    t.string "password_reset_digest"
+    t.datetime "password_reset_sent_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
