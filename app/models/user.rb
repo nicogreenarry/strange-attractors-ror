@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :password_reset_token
 
   before_save { email.downcase! }
   validates :email,
