@@ -35,10 +35,9 @@ class PasswordResetsController < ApplicationController
       @user.forget
       reset_session
       log_in @user
+      @user.update_columns(password_reset_digest: nil, password_reset_sent_at: nil)
       flash[:success] = "Password has been reset."
       redirect_to @user
-      # We don't set the password_reset_digest to nil because if the user ever clicks on the
-      # link again, we still want to be able to show them the "link expired" message.
     else
       render 'edit'
     end
