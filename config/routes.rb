@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   # Attractors
   get '/attractors/featured/random', to: 'attractors#random_featured'
   post '/attractors', to: 'attractors#create'
+  delete '/attractor/:id', to: 'attractors#delete' # Delete saved attractor
   # Admin-only routes
   get '/attractors/featured', to: 'attractors#featured'
   get '/attractors/resize', to: 'attractors#resize', as: 'resize_attractor'
