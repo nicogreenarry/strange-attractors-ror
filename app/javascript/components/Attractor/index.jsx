@@ -1,6 +1,34 @@
 import React, { useEffect, useMemo, useRef } from 'react';
+import styled from 'styled-components';
+
 import AttractorPoints from '../../services/attractor/attractor_points';
+import { CloseIcon } from '../CloseButton';
 import Equation from '../Equation';
+
+import Control from './Control';
+import {deleteSavedAttractor} from './attractor_ducks';
+
+const Container = styled.div`
+  position: relative;
+`;
+const Controls = styled.div`
+  position: absolute;
+  top: 0;
+  left: -15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  .control-label {
+    display: none;
+  }
+  &:hover, &:focus, &:focus-within, &:active {
+    .control-label {
+      display: unset;
+    }    
+  }
+`;
 
 const COLOR = [15, 12, 156, 255]; // RGBA color
 
@@ -19,6 +47,7 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height}) {
   props: {
     className?: string
     coefficients: array of 12 integers
+    id?: integer; // The attractor's id from the database. Obviously won't be present if it isn't persisted.
     initialCount: integer; the number of points that will be rendered
     showEquation?: boolean
     startXy: [number, number] - the x, y coordinates of the point to start with
@@ -31,6 +60,7 @@ const Attractor = ({
   coefficients,
   handleClickAttractor = () => {},
   height,
+  id,
   initialCount,
   showEquation,
   startXy,
@@ -75,7 +105,15 @@ const Attractor = ({
   }, [canvasEl.current, ...coefficients, ...startXy, initialCount, width, height]);
 
   return (
-    <>
+    <Container>
+      <Controls>
+        <Control
+          label="Delete"
+          icon={<CloseIcon />}
+          className="btn-danger"
+          onClick={() => deleteSavedAttractor(id)}
+        />
+      </Controls>
       <div className="d-flex justify-content-center" onClick={() => handleClickAttractor({coefficients, startXy})}>
         <canvas
           ref={canvasEl}
@@ -91,7 +129,7 @@ const Attractor = ({
           className="mb-3"
         />
       )}
-    </>
+    </Container>
   );
 };
 

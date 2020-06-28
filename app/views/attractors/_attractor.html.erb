@@ -3,7 +3,8 @@
                                            startXy: attractor.details["startXy"],
                                            showEquation: false,
                                            initialCount: 30000,
-                                           width: 300, height: 300 }) %>
+                                           width: 300, height: 300,
+                                           id: attractor.id }) %>
   <p class="mb-0">
     <%= link_to attractor.user.name, attractor.user %> | Discovered <%= time_ago_in_words(attractor.created_at) %> ago.
   </p>

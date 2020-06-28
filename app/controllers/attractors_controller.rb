@@ -1,5 +1,5 @@
 class AttractorsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :resize]
+  before_action :logged_in_user, only: [:create, :resize, :delete]
   before_action :admin_user, only: [:resize, :all_featured]
 
   def random_featured
@@ -55,6 +55,17 @@ class AttractorsController < ApplicationController
   def featured
     attractors = Attractor.featured.paginate(page: params[:page], per_page: 12)
     render json: attractors.map { |a| a.slice('id', 'details') }
+  end
+
+  # Deletes a saved attractor
+  def delete
+    attractor = Attractor.find_by(id: params[:id])
+    return render json: { success: true } unless attractor
+    unless attractor.user_id == current_user.id
+      return render json: { success: false, message: "You can only delete attractors that belong to you"}
+    end
+    attractor.destroy
+    render json: { success: true }
   end
 
   private def attractor_params
