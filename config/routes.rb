@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   get '/login', to: 'sessions#new'
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
+  get '/request-reset-password', to: 'password_resets#new'
+  post '/request-reset-password', to: 'password_resets#create'
+  resources :password_resets, only: [:edit, :update]
 
   # Attractors
   get '/attractors/featured/random', to: 'attractors#random_featured'

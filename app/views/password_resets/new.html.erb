@@ -1,0 +1,16 @@
+<% provide(:title, 'Forgot password') %>
+<div class="primary-color d-flex flex-column justify-content-center pt-4">
+  <header class="container secondary-color text-center">
+    <h1 class="display-4 mb-4">Forgot password</h1>
+  </header>
+  <section class="primary-color d-flex flex-column align-items-stretch justify-content-center mx-5 px-5">
+    <%= form_with(url: request_reset_password_path, scope: :password_reset, local: true) do |f| %>
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, class: 'form-control' %>
+      </div>
+
+      <%= f.submit "Submit", class: "btn btn-primary mt-3" %>
+    <% end %>
+  </section>
+</div>
