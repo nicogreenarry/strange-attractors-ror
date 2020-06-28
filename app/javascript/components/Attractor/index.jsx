@@ -45,6 +45,7 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height}) {
 
 /*
   props: {
+    canDelete?: boolean; // Whether the user should be able to delete this attractor
     className?: string
     coefficients: array of 12 integers
     id?: integer; // The attractor's id from the database. Obviously won't be present if it isn't persisted.
@@ -56,6 +57,7 @@ function getCanvasXYFromPoint({x, y, xMin, xMax, yMin, yMax, width, height}) {
   }
  */
 const Attractor = ({
+  canDelete,
   className,
   coefficients,
   handleClickAttractor = () => {},
@@ -107,12 +109,14 @@ const Attractor = ({
   return (
     <Container>
       <Controls>
-        <Control
-          label="Delete"
-          icon={<CloseIcon />}
-          className="btn-danger"
-          onClick={() => deleteSavedAttractor(id)}
-        />
+        {canDelete && (
+          <Control
+            label="Delete"
+            icon={<CloseIcon/>}
+            className="btn-danger"
+            onClick={() => deleteSavedAttractor(id)}
+          />
+        )}
       </Controls>
       <div className="d-flex justify-content-center" onClick={() => handleClickAttractor({coefficients, startXy})}>
         <canvas
