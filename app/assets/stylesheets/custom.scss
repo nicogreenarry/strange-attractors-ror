@@ -38,6 +38,10 @@ $state-danger-text: red;
   .user:last-child {
     border-bottom: none;
   }
+
+  .user-profile__attractor__container {
+    border: none;
+  }
 }
 
 /* User page */

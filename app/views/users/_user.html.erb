@@ -1,6 +1,10 @@
 <div class="user">
   <%= link_to user.name, user %>
+  <div class="d-flex justify-content-between">
+    <%= render user.attractors.sample(3), height: 150, width: 150, initialCount: 7500, canDelete: false %>
+  </div>
   <% if current_user.admin? && !current_user?(user) %>
-    | <%= link_to "delete", user, method: :delete, data: { confirm: "You sure?" } %>
+    <br>
+      <%= link_to "delete", user, method: :delete, data: { confirm: "You sure?" } %>
   <% end %>
 </div>
