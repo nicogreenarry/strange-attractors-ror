@@ -67,6 +67,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   host = 'quiet-stream-72579.herokuapp.com'
   config.action_mailer.default_url_options = { host: host, protocol: "https" }
+  Rails.application.routes.default_url_options = { host: host, protocol: "https" }
   ActionMailer::Base.smtp_settings = {
     port: ENV['MAILGUN_SMTP_PORT'],
     address: ENV['MAILGUN_SMTP_SERVER'],
