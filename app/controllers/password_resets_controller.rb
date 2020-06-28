@@ -1,6 +1,7 @@
 class PasswordResetsController < ApplicationController
   before_action :get_user, only: [:edit, :update]
   before_action :valid_user, only: [:edit, :update]
+  before_action :check_expiration, only: [:edit, :update]
 
   def new
   end
@@ -21,13 +22,42 @@ class PasswordResetsController < ApplicationController
   def edit
   end
 
+  def update
+    if params[:user][:password].empty?
+      # One advantage of using errors.add(:password, :blank) is that the resulting message is automatically rendered in
+      # the correct language when using the rails-i18n gem.
+      @user.errors.add(:password, :blank)
+      render 'edit'
+    elsif @user.update(user_params)
+      reset_session
+      log_in @user
+      flash[:success] = "Password has been reset."
+      redirect_to @user
+    else
+      render 'edit'
+    end
+  end
+
+  private def user_params
+    params.require(:user).permit(:password)
+  end
+
   # Before filters
   private def get_user
     @user = User.find_by(email: params[:email])
   end
 
   private def valid_user
-    # TODO: Flash message if we have to redirect
-    redirect_to root_url unless @user&.authenticated?(:password_reset, params[:id])
+    unless @user&.authenticated?(:password_reset, params[:id])
+      flash[:danger] = "Invalid password reset link"
+      redirect_to root_url
+    end
+  end
+
+  private def check_expiration
+    if @user.password_reset_expired?
+      flash[:danger] = "Password reset has expired."
+      redirect_to request_reset_password_url
+    end
   end
 end
