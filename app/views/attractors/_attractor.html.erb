@@ -2,8 +2,8 @@
   <%= react_component("Attractor/index", { coefficients: attractor.details["coefficients"],
                                            startXy: attractor.details["startXy"],
                                            showEquation: false,
-                                           initialCount: 30000,
-                                           width: 300, height: 300,
+                                           initialCount: initialCount,
+                                           width: width, height: height,
                                            id: attractor.id,
                                            canDelete: attractor.user_id == current_user.id }) %>
   <p class="mb-0">
