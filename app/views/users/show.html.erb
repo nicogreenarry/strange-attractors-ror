@@ -8,7 +8,7 @@
       <h3 class="mb-3">Attractors (<%= @user.attractors.count %>)</h3>
       <%= will_paginate @attractors %>
       <div class="attractors d-flex flex-column">
-        <%= render @attractors, height: 300, width: 300, initialCount: 30000 %>
+        <%= render @attractors, height: 300, width: 300, initialCount: 30000, canDelete: true %>
       </div>
       <%= will_paginate @attractors %>
     <% end %>

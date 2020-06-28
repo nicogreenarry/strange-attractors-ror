@@ -1,12 +1,10 @@
 <div class="user-profile__attractor__container">
-  <%= react_component("Attractor/index", { coefficients: attractor.details["coefficients"],
-                                           startXy: attractor.details["startXy"],
-                                           showEquation: false,
-                                           initialCount: initialCount,
-                                           width: width, height: height,
-                                           id: attractor.id,
-                                           canDelete: attractor.user_id == current_user.id }) %>
-  <p class="mb-0">
-    <%= link_to attractor.user.name, attractor.user %> | Discovered <%= time_ago_in_words(attractor.created_at) %> ago.
-  </p>
+  <%= react_component("Attractor/index", {
+    coefficients: attractor.details["coefficients"],
+    startXy: attractor.details["startXy"],
+    showEquation: false,
+    initialCount: initialCount,
+    width: width, height: height,
+    id: attractor.id,
+    canDelete: canDelete && attractor.user_id == current_user.id }) %>
 </div>
