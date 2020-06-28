@@ -66,7 +66,7 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true
   host = 'quiet-stream-72579.herokuapp.com'
-  config.action_mailer.default_url_options = { host: host }
+  config.action_mailer.default_url_options[:host] = host
   ActionMailer::Base.smtp_settings = {
     port: ENV['MAILGUN_SMTP_PORT'],
     address: ENV['MAILGUN_SMTP_SERVER'],
@@ -76,7 +76,6 @@ Rails.application.configure do
     authentication: :plain,
   }
   ActionMailer::Base.delivery_method = :smtp
-  # heroku config:set MAILGUN_SMTP_PORT=587 MAILGUN_SMTP_SERVER=smtp.mailgun.org MAILGUN_SMTP_LOGIN=postmaster@sandbox2f490537d8024c849dd7ddd5c86e582d.mailgun.org MAILGUN_SMTP_PASSWORD="68d981e4c638b8c1fb37d012157a0c3f-468bde97-569e87fa"
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
