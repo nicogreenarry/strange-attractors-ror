@@ -29,10 +29,16 @@ class PasswordResetsController < ApplicationController
       @user.errors.add(:password, :blank)
       render 'edit'
     elsif @user.update(user_params)
+      # One likely scenario for users unfortunate enough to have sessions stolen would be to
+      # immediately reset their passwords. As a result, it would be especially nice if password
+      # reset automatically expired any such hijacked sessions.
+      @user.forget
       reset_session
       log_in @user
       flash[:success] = "Password has been reset."
       redirect_to @user
+      # We don't set the password_reset_digest to nil because if the user ever clicks on the
+      # link again, we still want to be able to show them the "link expired" message.
     else
       render 'edit'
     end
