@@ -65,21 +65,18 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
-  # I'm not sure if it's preferable to use the herokuapp url or our custom url. If we use the latter, we might
-  # also have to update the ActionMailer::Base.smtp_settings[:domain] below.
   host = 'quiet-stream-72579.herokuapp.com'
-  config.action_mailer.default_url_options = { host: host }
+  config.action_mailer.default_url_options = { host: host, protocol: "https" }
+  Rails.application.routes.default_url_options = { host: host, protocol: "https" }
   ActionMailer::Base.smtp_settings = {
-    address: 'smtp.sendgrid.net',
-    port: '587',
+    port: ENV['MAILGUN_SMTP_PORT'],
+    address: ENV['MAILGUN_SMTP_SERVER'],
+    user_name: ENV['MAILGUN_SMTP_LOGIN'],
+    password: ENV['MAILGUN_SMTP_PASSWORD'],
+    domain: 'quiet-stream-72579.heroku.com',
     authentication: :plain,
-    user_name: ENV['SENDGRID_USERNAME'],
-    password: ENV['SENDGRID_PASSWORD'],
-    domain: 'heroku.com',
-    enable_starttls_auto: true
   }
-
+  ActionMailer::Base.delivery_method = :smtp
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
