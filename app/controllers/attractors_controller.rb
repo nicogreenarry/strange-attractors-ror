@@ -61,6 +61,7 @@ class AttractorsController < ApplicationController
   def delete
     attractor = Attractor.find_by(id: params[:id])
     return render json: { success: true } unless attractor
+    # TODO: This check would probably be better as a Before Filter
     unless attractor.user_id == current_user.id
       return render json: { success: false, message: "You can only delete attractors that belong to you"}
     end
@@ -70,19 +71,5 @@ class AttractorsController < ApplicationController
 
   private def attractor_params
     params.require(:attractor).permit(coefficients: [], startXy: [])
-  end
-
-  # Before filters
-  # TODO: Should this be a session helper, instead of duplicating it here and in the users controller?
-  private def logged_in_user
-    unless logged_in?
-      store_location
-      flash[:danger] = "Please log in."
-      request.xhr? ? render(json: {location: login_path}, status: 403) : redirect_to(login_url)
-    end
-  end
-
-  private def admin_user
-    redirect_to(root_url) unless admin?
   end
 end
